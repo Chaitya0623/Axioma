@@ -123,7 +123,7 @@ function Dashboard() {
                     <TabsTrigger id="step-4" value="Revenue" className="p-2 text-sm">Revenue Attribution</TabsTrigger>
                     <TabsTrigger id="step-5" value="Features" className="p-2 text-sm">Features</TabsTrigger>
                   </TabsList>
-                  <div className="text-center my-5">
+                  <div className="text-center">
                     <Button onClick={generatePDF}>Download Report</Button>
                   </div>
                 </div>
