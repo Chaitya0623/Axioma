@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ... */
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    /* --muted-foreground: 215.4 16.3% 44%; */
+    --muted-foreground: 77, 100%, 97%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 340, 79%, 64%;
+    --chart-1:204, 98%, 19%;
+    --chart-2: 174, 97%, 32%;
+    --chart-3: 41, 88%, 84%;
+    --chart-4: 29, 98%, 70%;
+    --chart-5: 13, 34%, 70%;
+    --chart-t: 204, 70%, 45%;
+    --chart-p: 162, 68%, 38%;
+    --chart-8: 48, 80%, 60%;
+    --chart-9: 24, 80%, 55%;
+    --chart-10: 13, 50%, 65%;
+    --chart-11: 222, 50%, 72%;
+    --chart-sub:352, 43%, 93%;
+    --chart-nonsub:283, 17%, 55%;
+    --chart-a1: 0, 14%, 78%;
+    --chart-a2: 39, 42%, 87%;
+    --chart-a3: 12, 29%, 77%;
+    --chart-a4: 358, 24%, 52%;
+    --chart-a5:337, 41%, 30%;
+    --chart-a6:23, 39%, 44%;
+    --text: 210 40% 98%;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 221.2 83.2% 53.3%;
+    --chart-1: 221.2 83.2% 53.3%;
+    --chart-2: 330.4 81.2% 60.4%;
+    --chart-3: 37.7 92.1% 50.2%;
+    --chart-4: 270.7 91% 65.1%;
+    --chart-5: 173.4 80.4% 40%;
+    --text: 210 40% 98%;
+    }
+}
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply bg-background text-foreground overscroll-none;
+    /* font-feature-settings: "rlig" 1, "calt" 1; */
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+  }
+
+  @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+    [data-wrapper] {
+      @apply min-[1800px]:border-t;
+    }
+  }
+
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 5px;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+}
