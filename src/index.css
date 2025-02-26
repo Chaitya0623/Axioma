@@ -107,18 +107,30 @@
     }
   }
 
-  ::-webkit-scrollbar {
-    width: 5px;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: hsl(var(--border));
-    border-radius: 5px;
-  }
+/* Webkit Scrollbar (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 10px; /* Adjust width for better visibility */
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(3,7,18); /* Dark background for contrast */
+  /* border-radius: 10px; */
+}
+
+::-webkit-scrollbar-thumb {
+  background: white; /* Light gray scrollbar for visibility */
+  border-radius: 10px;
+  border: 2px solid #111; /* Creates a nice gap effect */
+}
+}
+
+
+
+@layer base {
   * {
-    scrollbar-width: thin;
-    scrollbar-color: hsl(var(--border)) transparent;
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }

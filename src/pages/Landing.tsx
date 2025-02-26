@@ -15,6 +15,15 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "../components/ui/chart"
+import {
+  Table,
+  TableBody,
+  // TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 import dataJson from './data.json';
 import { format } from "date-fns";
@@ -395,6 +404,65 @@ export function Box() {
       </>
     )}
 
+    export function Trending() {
+
+
+      return (
+        <Card>
+          <CardHeader className="items-center pb-0">
+            <CardTitle className="font-bold text-lg">Trending Articles in the Past 7 Days</CardTitle>
+          </CardHeader>
+          <CardContent>
+          <Table>
+            {/* <TableCaption>Trending articles by number of unique visitors in the past 7 days.</TableCaption> */}
+            <TableHeader>
+                <TableRow>
+                <TableHead>Article</TableHead>
+                <TableHead>Category</TableHead>
+                <TableHead className="text-right">Unique Visitors</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+            <TableRow>
+              <TableCell className="text-muted-foreground">Cybersecurity Trends in 2025</TableCell>
+              <TableCell className="text-muted-foreground">Security</TableCell>
+              <TableCell className="text-right text-muted-foreground">8,500</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="text-muted-foreground">The Future of Mental Health Tech</TableCell>
+              <TableCell className="text-muted-foreground">Health</TableCell>
+              <TableCell className="text-right text-muted-foreground">7,200</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="text-muted-foreground">Affordable Housing Solutions in Urban Areas</TableCell>
+              <TableCell className="text-muted-foreground">Housing</TableCell>
+              <TableCell className="text-right text-muted-foreground">3,400</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="text-muted-foreground">How Politics Shapes Healthcare Policies</TableCell>
+              <TableCell className="text-muted-foreground">Politics</TableCell>
+              <TableCell className="text-right text-muted-foreground">2,900</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="text-muted-foreground">The Role of Art in Community Healing</TableCell>
+              <TableCell className="text-muted-foreground">Arts</TableCell>
+              <TableCell className="text-right text-muted-foreground">2,500</TableCell>
+            </TableRow>
+    
+            </TableBody>
+            </Table>
+    
+          </CardContent>
+          <CardFooter className="flex-col text-center gap-2 text-base">
+            <div className="leading-none text-muted-foreground">
+            Tech and security topics dominate readership, but housing and arts have untapped potential for younger audiences on social media.
+            </div>
+          </CardFooter>
+        </Card>
+      );
+    }
+
+
 type TagsProps = {
     selectedMonth?: Date;
   };
@@ -403,6 +471,9 @@ const Landing : React.FC<TagsProps> = ({ selectedMonth }) =>{
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <Top selectedMonth={selectedMonth}/>
               <Box/>
+              <div className="sm:col-span-2">
+                <Trending />
+              </div>
           </div>
   )
 }

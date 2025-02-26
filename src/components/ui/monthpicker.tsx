@@ -66,7 +66,7 @@ function MonthPicker({
     ...props
 }: React.HTMLAttributes<HTMLDivElement> & MonthCalProps) {
     return (
-        <div className={cn("min-w-[200px] w-[280px] p-3", className)} {...props}>
+        <div className={cn("min-w-[200px] w-[280px] p-3 bg-black text-white", className)} {...props}>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0">
                 <div className="space-y-4 w-full">
                     <MonthCal
@@ -107,7 +107,7 @@ function MonthCal({ selectedMonth, onMonthSelect, callbacks, variant, minDate, m
                             setMenuYear(menuYear - 1);
                             if (onYearBackward) onYearBackward();
                         }}
-                        className={cn(buttonVariants({ variant: variant?.chevrons ?? "outline" }), "inline-flex items-center justify-center h-7 w-7 p-0 absolute left-1")}
+                        className={cn(buttonVariants({ variant: variant?.chevrons ?? "outline" }), "inline-flex items-center justify-center h-7 w-7 p-0 absolute left-1 rounded")}
                     >
                         <ChevronLeft className="opacity-50 h-4 w-4" />
                     </button>
@@ -116,7 +116,7 @@ function MonthCal({ selectedMonth, onMonthSelect, callbacks, variant, minDate, m
                             setMenuYear(menuYear + 1);
                             if (onYearForward) onYearForward();
                         }}
-                        className={cn(buttonVariants({ variant: variant?.chevrons ?? "outline" }), "inline-flex items-center justify-center h-7 w-7 p-0 absolute right-1")}
+                        className={cn(buttonVariants({ variant: variant?.chevrons ?? "outline" }), "inline-flex items-center justify-center h-7 w-7 p-0 absolute right-1 rounded")}
                     >
                         <ChevronRight className="opacity-50 h-4 w-4" />
                     </button>
@@ -145,8 +145,8 @@ function MonthCal({ selectedMonth, onMonthSelect, callbacks, variant, minDate, m
                                                     (disabledDatesMapped ? disabledDatesMapped?.some((d) => d.year == menuYear && d.month == m.number) : false)
                                                 }
                                                 className={cn(
-                                                    buttonVariants({ variant: month == m.number && menuYear == year ? variant?.calendar?.selected ?? "default" : variant?.calendar?.main ?? "ghost" }),
-                                                    "h-full w-full p-0 font-normal aria-selected:opacity-100"
+                                                    buttonVariants({ variant: month == m.number && menuYear == year ? variant?.calendar?.selected ?? "secondary" : variant?.calendar?.main ?? "ghost" }),
+                                                    "h-full w-full p-0 font-normal aria-selected:opacity-100 rounded"
                                                 )}
                                             >
                                                 {callbacks?.monthLabel ? callbacks.monthLabel(m) : m.name}
