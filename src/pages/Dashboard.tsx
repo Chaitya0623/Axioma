@@ -8,6 +8,7 @@ import Revenue from './Revenue';
 import Features from './Features';
 import Landing from './Landing';
 import TourGuide from './TourGuide';
+import Plots from './Plots';
 
 import { useEffect, useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -123,6 +124,8 @@ function Dashboard() {
                     <TabsTrigger id="step-3" value="Author" className="p-2 text-sm rounded">Author Performance</TabsTrigger>
                     <TabsTrigger id="step-4" value="Revenue" className="p-2 text-sm rounded">Revenue Attribution</TabsTrigger>
                     {/* <TabsTrigger id="step-5" value="Features" className="p-2 text-sm rounded">Features</TabsTrigger> */}
+                    <TabsTrigger value="Trends" className="p-2 text-sm">Trends</TabsTrigger>
+                    <TabsTrigger value="Plots" className="p-2 text-sm">Plots</TabsTrigger>
                     <TabsTrigger id="step-6" value="Click" className="p-2 text-sm rounded">Click Prediction</TabsTrigger>
                   </TabsList>
                   <div className="text-center text-sm">
@@ -142,6 +145,8 @@ function Dashboard() {
                       <SelectItem value="Author">Author Performance</SelectItem>
                       <SelectItem value="Revenue">Revenue Attribution</SelectItem>
                       <SelectItem value="Features">Features</SelectItem>
+                      <SelectItem value="Trends">Trends</SelectItem>
+                      <SelectItem value="Plots">Plots</SelectItem>
                       <SelectItem value="Click">Click</SelectItem>
                     </SelectContent>
                   </Select>

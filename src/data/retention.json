@@ -1,0 +1,50 @@
+{
+    "data": [
+      {
+        "browser": "1",
+        "months": {
+          "January": 65,
+          "February": 72,
+          "March": 80
+        },
+        "fill": "hsl(var(--chart-1))"
+      },
+      {
+        "browser": "2",
+        "months": {
+          "January": 50,
+          "February": 55,
+          "March": 62
+        },
+        "fill": "var(--color-2)"
+      },
+      {
+        "browser": "3",
+        "months": {
+          "January": 68,
+          "February": 74,
+          "March": 77
+        },
+        "fill": "var(--color-3)"
+      },
+      {
+        "browser": "4",
+        "months": {
+          "January": 60,
+          "February": 65,
+          "March": 70
+        },
+        "fill": "var(--color-4)"
+      },
+      {
+        "browser": "5",
+        "months": {
+          "January": 55,
+          "February": 59,
+          "March": 64
+        },
+        "fill": "var(--color-5)"
+      }
+    ]
+  }
+  
