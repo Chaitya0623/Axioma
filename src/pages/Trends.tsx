@@ -9,6 +9,7 @@ import Plot from "./Plots"
 interface Topic {
   topic: string;
   count: number;
+  source: string;
 }
 
 interface SourceData {
@@ -16,121 +17,116 @@ interface SourceData {
   topics: Topic[];
 }
 
-
-
 const SocialMedia = ({ socialMediaData }: { socialMediaData: SourceData[] }) => {
-  const svgRef = useRef<SVGSVGElement | null>(null);
-  const [dimensions, setDimensions] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
-
-  useEffect(() => {
-    const handleResize = () => {
-      setDimensions({ width: window.innerWidth, height: window.innerHeight });
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-
-  useEffect(() => {
-    if (!svgRef.current) return;
-
-    const width = dimensions.width/5;
-    const height = dimensions.height/5;
-
-    const svg = d3.select(svgRef.current)
-      .attr("width", "80%")
-      .attr("height", "80%")
-      .style("border", "1px solid #ddd")
-      .style("background-color", "transparent")
-      .style("display", "block")  // This makes the SVG a block element
-  .style("margin", "auto");   
-
+    const svgRef = useRef<SVGSVGElement | null>(null);
+    const [dimensions, setDimensions] = useState({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
   
-    // Flatten and process the social media data
-    const flattenedData: Topic[] = socialMediaData.flatMap((sourceData) =>
-      sourceData.topics.map((topic) => ({ ...topic, source: sourceData.source }))
-    );
-
-    flattenedData.sort((a, b) => b.count - a.count);
-
-    const maxCount = d3.max(flattenedData, (d: Topic) => d.count) || 0;
-    const minCount = d3.min(flattenedData, (d: Topic) => d.count) || 0;
-
-    const sizeScale = d3.scaleSqrt()
-      .domain([minCount, maxCount])
-      .range([20, 80]);
-
-    const colorScale = (source: string) => {
-      switch (source) {
-        case "instagram":
-          return "#FF69B4"; // Pink
-        case "google":
-          return "#FFEB3B"; // Yellow
-        case "truthSocial":
-          return "#1DA1F2"; // Blue
-        default:
-          return "#333";
-      }
-    };
-
-    const simulation = d3.forceSimulation(flattenedData)
-      .force("center", d3.forceCenter(width / 2, height / 2))
-      .force("charge", d3.forceManyBody().strength(-10))
-      .force("collide", d3.forceCollide().radius((d: any) => sizeScale(d.count) + 5))
+    useEffect(() => {
+      const handleResize = () => {
+        setDimensions({ width: window.innerWidth, height: window.innerHeight });
+      };
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+  
+    useEffect(() => {
+      if (!svgRef.current) return;
+  
+      const width = dimensions.width / 5;
+      const height = dimensions.height / 5;
+  
+      const svg = d3.select(svgRef.current)
+        .attr("width", "90%")
+        .attr("height", "80%")
+        .style("border", "1px solid #ddd")
+        .style("background-color", "transparent")
+        .style("display", "block")
+        .style("margin", "auto");
+  
+      // Flatten and process the social media data
+      const flattenedData: Topic[] = socialMediaData.flatMap((sourceData) =>
+        sourceData.topics.map((topic) => ({ ...topic, source: sourceData.source }))
+      );
+  
+      flattenedData.sort((a, b) => b.count - a.count);
+  
+      const maxCount = d3.max(flattenedData, (d: Topic) => d.count) || 0;
+      const minCount = d3.min(flattenedData, (d: Topic) => d.count) || 0;
+  
+      // Create a responsive font size scale based on count
+      const sizeScale = d3.scaleSqrt()
+        .domain([minCount, maxCount])
+        .range([0, Math.min(width, height) /5]); // Ensure words don't overflow
+  
+      // Create a color scale for each source
+      const colorScale = d3.scaleOrdinal()
+        .domain(["instagram", "google", "truthSocial"])
+        .range(["#FF69B4", "#FFEB3B", "#1DA1F2"]);
+  
+      // Set up the force simulation
+      d3.forceSimulation(flattenedData)
+      .force("center", d3.forceCenter(width / 2, height/2)) // Place at center
+      .force("charge", d3.forceManyBody().strength(20)) // Repulsion between nodes
+      .force("collide", d3.forceCollide().radius((d: any) => sizeScale(d.count)*3)) // Collision force to prevent overlap
       .on("tick", ticked);
-
-    const tooltip = d3.select("body").append("div")
-      .attr("class", "tooltip")
-      .style("position", "absolute")
-      .style("visibility", "hidden")
-      .style("background-color", "rgba(0, 0, 0, 0.75)")
-      .style("color", "white")
-      .style("padding", "5px")
-      .style("border-radius", "5px")
-      .style("font-size", "14px");
-
-    const words = svg.selectAll(".word")
-      .data(flattenedData)
-      .enter()
-      .append("text")
-      .attr("class", "word")
-      .text((d: Topic) => d.topic)
-      .attr("font-size", (d: Topic) => sizeScale(d.count)/2)
-      .attr("fill", (d: Topic) => colorScale(d.source))
-      .attr("font-family", "Arial, sans-serif")
-      .style("cursor", "pointer")
-      .on("mouseover", (event: any, d: Topic) => {
-        tooltip.transition().duration(200).style("visibility", "visible");
-        tooltip.html(`Topic: ${d.topic}<br/>Total Count: ${d.count}<br/>Source: ${d.source}`);
-      })
-      .on("mousemove", (event: any) => {
-        tooltip.style("top", (event.pageY ) + "px")
-          .style("left", (event.pageX + 5) + "px");
-      })
-      .on("mouseout", () => {
-        tooltip.transition().duration(200).style("visibility", "hidden");
-      });
-
-    function ticked() {
-      words
-        .attr("x", (d: any) => Math.max(0, Math.min(width - sizeScale(d.count), d.x)))
-        .attr("y", (d: any) => Math.max(0, Math.min(height*5 - sizeScale(d.count), d.y)));
-    }
-  }, [socialMediaData]);
-
-  return (
-    <Card>
+  
+      // Tooltip setup
+      const tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("position", "absolute")
+        .style("visibility", "hidden")
+        .style("background-color", "rgba(0, 0, 0, 0.75)")
+        .style("color", "white")
+        .style("padding", "5px")
+        .style("border-radius", "5px")
+        .style("font-size", "14px");
+  
+      // Add words to the SVG
+      const words = svg.selectAll(".word")
+        .data(flattenedData)
+        .enter()
+        .append("text")
+        .attr("class", "word")
+        .text((d: Topic) => d.topic)
+        .attr("font-size", (d: Topic) => sizeScale(d.count)) // Set font size based on count
+        .attr("fill", (d: Topic) => colorScale(d.source)) // Apply the color scale
+        .attr("font-family", "Arial, sans-serif")
+        .style("cursor", "pointer")
+        .on("mouseover", (event: any, d: Topic) => {
+          tooltip.transition().duration(200).style("visibility", "visible");
+          tooltip.html(`Topic: ${d.topic}<br/>Total Count: ${d.count}<br/>Source: ${d.source}`);
+        })
+        .on("mousemove", (event: any) => {
+          tooltip.style("top", (event.pageY) + "px");
+            // .style("center", (event.pageX) + "px");
+        })
+        .on("mouseout", () => {
+          tooltip.transition().duration(200).style("visibility", "hidden");
+        });
+  
+      // Update the positions of the words on each tick of the simulation
+      function ticked() {
+        words
+          .attr("x", (d: any) => Math.max(0, Math.min(width*2 - sizeScale(d.count), d.x))) // Prevent words from going out of bounds horizontally
+          .attr("y", (d: any) => Math.max(0, Math.min(height*1.2 - sizeScale(d.count), d.y))); // Prevent words from going out of bounds vertically
+      }
+    }, [socialMediaData, dimensions]);
+  
+    return (
+      <Card>
         <CardHeader className="items-center pb-0">
-      <CardTitle>Trending Topics on Social Media</CardTitle>
-      </CardHeader>
-      <svg className="p-8" ref={svgRef}></svg>
-    </Card>
-  );
-};
-
+          <CardTitle className="pb-2">Trending Topics on Social Media</CardTitle>
+        </CardHeader>
+        <svg ref={svgRef}></svg>
+      </Card>
+    );
+  };
+  
+  
+  
 
 interface Topic {
     name: string;
@@ -175,7 +171,7 @@ const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics 
     return (
       <Card>
         <CardHeader className="items-center pb-0">
-                <CardTitle className="font-bold text-lg">Influence Chart</CardTitle>
+                <CardTitle >Influence Chart</CardTitle>
               </CardHeader>
         <div className="p-10">
           <div className="p-2">
@@ -247,25 +243,53 @@ const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics 
   };
   
 
-  const getTotalCount = (topic: string) => {
+//   const getTotalCount = (topic: string) => {
+//     let totalCount = 0;
+  
+//     // Ensure trends.google, trends.instagram, and trends.twitter are defined and contain trending_topics
+//     ['google', 'instagram', 'twitter'].forEach((platform) => {
+//       const platformData = data[platform];
+  
+//       if (platformData && Array.isArray(platformData.trending_topics)) {
+//         platformData.trending_topics.forEach((t) => {
+//           if (t.topic === topic) {
+//             totalCount += t.count;
+//           }
+//         });
+//       }
+//     });
+  
+//     return totalCount;
+//   };
+  
+const getTotalCount = (topic: string) => {
     let totalCount = 0;
+    
+    // Logging to make sure we're going through each platform
+    console.log(`Calculating total count for topic: ${topic}`);
   
-    // Ensure trends.google, trends.instagram, and trends.twitter are defined and contain trending_topics
+    // Sum the counts for the given topic across all platforms
     ['google', 'instagram', 'twitter'].forEach((platform) => {
-      const platformData = data[platform];
+      const platformData = data[platform]?.trending_topics;
   
-      if (platformData && Array.isArray(platformData.trending_topics)) {
-        platformData.trending_topics.forEach((t) => {
+      // Log to confirm we're getting the platform data
+      console.log(`Platform: ${platform}, Data:`, platformData);
+  
+      if (platformData) {
+        platformData.forEach((t) => {
           if (t.topic === topic) {
             totalCount += t.count;
+            // Log the data for the topic in each platform
+            console.log(`Found topic on ${platform} - Topic: ${t.topic}, Count: ${t.count}`);
           }
         });
       }
     });
   
+    console.log(`Total count for topic '${topic}': ${totalCount}`);
+    
     return totalCount;
   };
-  
   
 
   const Topics = () => {
@@ -287,12 +311,12 @@ const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics 
     const uniqueTopics = Object.values(uniqueTopicsMap);
   
     // Threshold for high demand and untapped topics
-    const highDemandThreshold = 200;
+    const highDemandThreshold = 100;
     const untappedThreshold = 50;
   
     // Identify high demand topics (trending + high cumulative count)
     const highDemandTopics = uniqueTopics
-      .filter((topic) => topic.type === 'trending' && getTotalCount(topic.topic) > highDemandThreshold)
+      .filter((topic) => topic.type === 'trending' && highDemandThreshold > getTotalCount(topic.topic)  )
       .sort((a, b) => getTotalCount(b.topic) - getTotalCount(a.topic)); // Sort by highest cumulative count
       
   
@@ -301,14 +325,14 @@ const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics 
       .filter((topic) => topic.type === 'rising' && getTotalCount(topic.topic) <= untappedThreshold)
       .sort((a, b) => getTotalCount(b.topic) - getTotalCount(a.topic)); // Sort by lowest cumulative count
 
-      console.log(untappedTopics)
+      console.log(highDemandTopics)
   
     return (
       <div className="space-y-8">
-        <div className="flex flex-col md:flex-row gap-8">
+        <Card className="flex flex-col md:flex-row gap-8 p-6">
           {/* High Demand Topics Table */}
           <div className="w-full md:w-1/2">
-            <h3 className="text-xl font-bold">High Demand Topics</h3>
+            <CardTitle >High Demand Topics</CardTitle>
             <Table className="table-auto w-full text-left">
               <TableHeader>
                 <TableRow>
@@ -319,10 +343,10 @@ const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics 
               <tbody>
                 {highDemandTopics.map((topic) => (
                   <TableRow key={topic.topic}>
-                    <TableCell className="px-4 py-2">
-                      <strong>{topic.topic}</strong>
+                    <TableCell className="px-4 py-2  text-white">
+                      {topic.topic}
                     </TableCell>
-                    <TableCell className="px-4 py-2"><TrendingUp className="h-4 w-4" /></TableCell>
+                    <TableCell className="px-4 py-2  text-white"><TrendingUp className="h-4 w-4" /></TableCell>
                   </TableRow>
                 ))}
               </tbody>
@@ -331,7 +355,7 @@ const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics 
   
           {/* Untapped Topics Table */}
           <div className="w-full md:w-1/2">
-            <h3 className="text-xl font-bold">Untapped Topics</h3>
+            <CardTitle>Untapped Topics</CardTitle>
             <Table className="table-auto w-full text-left">
               <TableHeader>
                 <TableRow>
@@ -342,16 +366,16 @@ const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics 
               <tbody>
                 {untappedTopics.map((topic) => (
                   <TableRow key={topic.topic}>
-                    <TableCell className="px-4 py-2">
-                      <strong>{topic.topic}</strong>
+                    <TableCell className="px-4 py-2 text-white">
+                      {topic.topic}
                     </TableCell>
-                    <TableCell className="px-4 py-2"><TrendingUp className="h-4 w-4" /></TableCell>
+                    <TableCell className="px-4 py-2 text-white"><TrendingUp className="h-4 w-4" /></TableCell>
                   </TableRow>
                 ))}
               </tbody>
             </Table>
           </div>
-        </div>
+        </Card>
       </div>
     );
   };
@@ -374,7 +398,6 @@ const Trends = () => {
       trending_topics: socialMediaData[2].topics || [],
     }
   };
-// console.log(trends)
   return (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

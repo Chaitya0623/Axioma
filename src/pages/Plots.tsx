@@ -14,7 +14,6 @@ const BubbleChart = () => {
     ).filter(Boolean)
   ).filter(Boolean);
 
-  console.log(newData);
 
   const sourceColors: Record<string, string> = {
     "BBC-News": "rgb(1, 58, 96)",
