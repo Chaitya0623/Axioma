@@ -120,7 +120,7 @@ export default function Chatbot({ id }: ChatbotProps) {
         {/* Floating Button */}
         <Button id={id}
           onClick={() => setIsOpen(!isOpen)}
-          className="shadow-lg bg-blue-600 hover:bg-blue-700 text-white rounded-xl p-2 flex items-center justify-center"
+          className="shadow-lg bg-white hover:bg-white text-black rounded-xl p-2 flex items-center justify-center"
         >
           {isOpen ? <br /> : "Chat"}
         </Button>
@@ -181,7 +181,7 @@ export default function Chatbot({ id }: ChatbotProps) {
                 />
                 <Button
                   onClick={handleSendMessage}
-                  className="bg-blue-600 hover:bg-blue-700 text-white rounded-full"
+                  className="bg-green-600 hover:bg-green-700 text-white rounded-full"
                 >
                   Send
                 </Button>

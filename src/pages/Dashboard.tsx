@@ -26,24 +26,27 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import Click from './Click';
 
-function Date({ onMonthSelect, selectedMonth }: { onMonthSelect: (date: Date) => void, selectedMonth?: Date }) {
+// function Date({ onMonthSelect, selectedMonth }: { onMonthSelect: (date: Date) => void, selectedMonth?: Date }) {
+function Date({ selectedMonth }: { selectedMonth?: Date }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant={"outline"} className={cn("w-[280px] justify-start text-left font-normal", !selectedMonth && "text-muted-foreground")}>
+        <Button variant={"outline"} className={cn("w-[150px] justify-start bg-black text-left font-normal rounded", !selectedMonth && "text-muted-foreground")}>
           <CalendarIcon className="mr-2 h-4 w-4" />
           {selectedMonth ? format(selectedMonth, "MMM yyyy") : <span>Pick a Month</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
-        <MonthPicker onMonthSelect={onMonthSelect} selectedMonth={selectedMonth} />
+        {/* <MonthPicker onMonthSelect={onMonthSelect} selectedMonth={selectedMonth} /> */}
+        <MonthPicker selectedMonth={selectedMonth} />
       </PopoverContent>
     </Popover>
   );
 }
 
 function Dashboard() {
-  const [selectedMonth, setSelectedMonth] = useState<Date | undefined>(undefined);
+  // const [selectedMonth, setSelectedMonth] = useState<Date | undefined>(undefined);
+  const [selectedMonth] = useState<Date | undefined>(undefined);
   const [selectedTab, setSelectedTab] = useState<string>("Landing");
   const [startTour, setStartTour] = useState(true);  // Don't trigger the tour immediately
   const [loaded, setLoaded] = useState(false);
@@ -144,8 +147,9 @@ function Dashboard() {
                       <SelectItem value="User">User Demographics</SelectItem>
                       <SelectItem value="Author">Author Performance</SelectItem>
                       <SelectItem value="Revenue">Revenue Attribution</SelectItem>
-                      <SelectItem value="Features">Features</SelectItem>
+                      {/* <SelectItem value="Features">Features</SelectItem> */}
                       <SelectItem value="Trends">Trends</SelectItem>
+                      {/* <SelectItem value="Plots">Plots</SelectItem> */}
                       <SelectItem value="Click">Click</SelectItem>
                     </SelectContent>
                   </Select>
@@ -154,7 +158,8 @@ function Dashboard() {
 
               {/* DateRangePicker positioned next to TabsList on desktop */}
               <div className="md:mt-0 md:ml-4 flex justify-center">
-                <Date onMonthSelect={setSelectedMonth} selectedMonth={selectedMonth} />
+                {/* <Date onMonthSelect={setSelectedMonth} selectedMonth={selectedMonth} /> */}
+                <Date selectedMonth={selectedMonth} />
               </div>
             </div>
 
