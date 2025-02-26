@@ -8,7 +8,7 @@ import Revenue from './Revenue';
 import Features from './Features';
 import Landing from './Landing';
 import TourGuide from './TourGuide';
-import Plots from './Plots';
+import Trends from './Trends';
 
 import { useEffect, useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -18,6 +18,7 @@ import { format } from "date-fns/format";
 import { cn } from "@/lib/utils";
 import { MonthPicker } from "@/components/ui/monthpicker";
 import Chatbot from './Chatbot';
+
 
 import { Select, SelectTrigger, SelectValue, SelectItem, SelectContent } from '@/components/ui/select';
 
@@ -44,7 +45,8 @@ function Date({ selectedMonth }: { selectedMonth?: Date }) {
 }
 
 function Dashboard() {
-  const [selectedMonth, setSelectedMonth] = useState<Date | undefined>(undefined);
+  // const [selectedMonth, setSelectedMonth] = useState<Date | undefined>(undefined);
+  const [selectedMonth] = useState<Date | undefined>(undefined);
   const [selectedTab, setSelectedTab] = useState<string>("Landing");
   const [startTour, setStartTour] = useState(true);  // Don't trigger the tour immediately
   const [loaded, setLoaded] = useState(false);
@@ -127,7 +129,6 @@ function Dashboard() {
                     <TabsTrigger id="step-4" value="Revenue" className="p-2 text-sm rounded">Revenue Attribution</TabsTrigger>
                     {/* <TabsTrigger id="step-5" value="Features" className="p-2 text-sm rounded">Features</TabsTrigger> */}
                     <TabsTrigger value="Trends" className="p-2 text-sm">Trends</TabsTrigger>
-                    <TabsTrigger value="Plots" className="p-2 text-sm">Plots</TabsTrigger>
                     <TabsTrigger id="step-6" value="Click" className="p-2 text-sm rounded">Click Prediction</TabsTrigger>
                   </TabsList>
                   <div className="text-center text-sm">
@@ -188,16 +189,17 @@ function Dashboard() {
                 <Features />
               </div>
             </TabsContent>
-            <TabsContent value="Plots">
-              <div id="tab-Plots">
-                <Plots />
-              </div>
-            </TabsContent>
+            <TabsContent value="Trends">
+              <div id="tab-Trends">
+                <Trends />
+                </div>
+                </TabsContent>
             <TabsContent value="Click">
               <div id="tab-Click">
                 <Click />
               </div>
             </TabsContent>
+            
 
           </Tabs>
         </div>

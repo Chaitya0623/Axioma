@@ -220,7 +220,49 @@
             ]
           }
         ]
-      }
-         
+      },
+      {
+        "title": "Social Media Trends",
+        "sources": [
+          {
+            "source": "Google",
+            "topics": [
+              { "topic": "AI", "count": 102, "type": "rising" },
+      { "topic": "Elections", "count": 88, "type": "trending" },
+      { "topic": "Cryptocurrency", "count": 76, "type": "trending" },
+      { "topic": "Health", "count": 65, "type": "rising" },
+      { "topic": "Space Exploration", "count": 15, "type": "rising" },
+      { "topic": "Mental Health", "count": 60, "type": "trending" },
+      { "topic": "Climate Change", "count": 55, "type": "rising" },
+      { "topic": "Stock Market", "count": 40, "type": "trending" }
+            ]
+          },
+          {
+            "source": "Instagram",
+            "topics": [
+              { "topic": "Grammy", "count": 150, "type": "rising" },
+      { "topic": "Kanye", "count": 125, "type": "trending" },
+      { "topic": "AI Revolution", "count": 100, "type": "rising" },
+      { "topic": "Fashion", "count": 85, "type": "trending" },
+      { "topic": "Football", "count": 72, "type": "rising" },
+      { "topic": "Climate Action", "count": 65, "type": "trending" },
+      { "topic": "Sustainability", "count": 60, "type": "rising" },
+      { "topic": "Celebrity News", "count": 50, "type": "trending" }
+            ]
+          },
+          {
+            "source": "Truth Social",
+            "topics": [
+              { "topic": "COVID", "count": 200, "type": "trending" },
+      { "topic": "Elections", "count": 180, "type": "rising" },
+      { "topic": "Tech News", "count": 150, "type": "trending" },
+      { "topic": "Crypto", "count": 130, "type": "rising" },
+      { "topic": "Mental Health", "count": 115, "type": "trending" },
+      { "topic": "Stock Market", "count": 110, "type": "rising" },
+      { "topic": "Kanye", "count": 90, "type": "trending" },
+      { "topic": "Space Exploration", "count": 18, "type": "rising" }
+            ]
+          }
+        ]}
   ]
 }
