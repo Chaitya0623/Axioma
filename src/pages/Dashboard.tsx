@@ -23,7 +23,6 @@ import { Select, SelectTrigger, SelectValue, SelectItem, SelectContent } from '@
 
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import GoogleTrends from './GoogleTrends';
 
 function Date({ onMonthSelect, selectedMonth }: { onMonthSelect: (date: Date) => void, selectedMonth?: Date }) {
   return (
@@ -44,7 +43,7 @@ function Date({ onMonthSelect, selectedMonth }: { onMonthSelect: (date: Date) =>
 function Dashboard() {
   const [selectedMonth, setSelectedMonth] = useState<Date | undefined>(undefined);
   const [selectedTab, setSelectedTab] = useState<string>("Landing");
-  const [startTour, setStartTour] = useState(true);  
+  const [startTour, setStartTour] = useState(true);  // Don't trigger the tour immediately
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -181,11 +180,6 @@ function Dashboard() {
             <TabsContent value="Features">
               <div id="tab-Features">
                 <Features />
-              </div>
-            </TabsContent>
-            <TabsContent value="Trends">
-              <div id="tab-Trends">
-                <GoogleTrends />
               </div>
             </TabsContent>
             <TabsContent value="Plots">
