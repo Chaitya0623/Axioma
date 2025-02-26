@@ -39,7 +39,7 @@ try {
       <div className="grid md:grid-cols-2 items-center gap-6 max-w-6xl w-full">
         <Card className=" rounded-xl p-6 max-w-md shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)] max-md:mx-auto bg-slate-700">
           <CardHeader>
-            <CardTitle className="text-gray-100 text-3xl font-bold text-center">Sign in</CardTitle>
+            <CardTitle className="text-gray-100 text-3xl font-bold text-center">Login</CardTitle>
             
           </CardHeader>
           <CardContent>
@@ -49,10 +49,10 @@ try {
                 <div className="relative flex items-center">
                   <Input
                     type="text"
-                    placeholder="Enter user name"
+                    placeholder="Enter Username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="w-full text-sm text-gray-800 border border-gray-300 pl-4 pr-10 py-3 rounded-lg outline-blue-600"
+                    className="w-full text-sm text-gray-800 border border-gray-300 pl-4 pr-10 py-3 rounded-lg outline-blue-600 rounded"
                   />
                 </div>
               </div>
@@ -61,10 +61,10 @@ try {
                 <div className="relative flex items-center">
                   <Input
                     type="password"
-                    placeholder="Enter password"
+                    placeholder="Enter Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full text-sm text-gray-800 border border-gray-300 pl-4 pr-10 py-3 rounded-lg outline-blue-600"
+                    className="w-full text-sm text-gray-800 border border-gray-300 pl-4 pr-10 py-3 rounded-lg outline-blue-600 rounded"
                   />
                 </div>
               </div>
@@ -74,8 +74,8 @@ try {
             </div>
           </CardContent>
           <CardFooter>
-            <Button className="w-full shadow-xl py-2.5 px-4 text-sm tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none" onClick={handleLogin}>
-              Sign in
+            <Button className="w-full shadow-xl py-2.5 px-4 text-sm tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none rounded" onClick={handleLogin}>
+              Login
             </Button>
           </CardFooter>
           

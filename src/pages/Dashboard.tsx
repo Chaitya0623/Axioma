@@ -8,7 +8,7 @@ import Revenue from './Revenue';
 import Features from './Features';
 import Landing from './Landing';
 import TourGuide from './TourGuide';
-import Plots from './Plots';
+import Trends from './Trends';
 
 import { useEffect, useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -19,11 +19,12 @@ import { cn } from "@/lib/utils";
 import { MonthPicker } from "@/components/ui/monthpicker";
 import Chatbot from './Chatbot';
 
+
 import { Select, SelectTrigger, SelectValue, SelectItem, SelectContent } from '@/components/ui/select';
 
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import Trends from './Trends';
+import Click from './Click';
 
 function Date({ onMonthSelect, selectedMonth }: { onMonthSelect: (date: Date) => void, selectedMonth?: Date }) {
   return (
@@ -31,7 +32,7 @@ function Date({ onMonthSelect, selectedMonth }: { onMonthSelect: (date: Date) =>
       <PopoverTrigger asChild>
         <Button variant={"outline"} className={cn("w-[280px] justify-start text-left font-normal", !selectedMonth && "text-muted-foreground")}>
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {selectedMonth ? format(selectedMonth, "MMM yyyy") : <span>Pick a month</span>}
+          {selectedMonth ? format(selectedMonth, "MMM yyyy") : <span>Pick a Month</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
@@ -68,7 +69,7 @@ function Dashboard() {
 
   const generatePDF = async () => {
     const pdf = new jsPDF("p", "mm", "a4");
-    const sections = ["Landing", "User", "Author", "Revenue", "Features", "Plots"];
+    const sections = ["Landing", "User", "Author", "Revenue", "Trends", "Click"];
     
     // Save the original selectedTab to restore after generating the PDF
     const originalTab = selectedTab;
@@ -119,15 +120,16 @@ function Dashboard() {
                 {/* For larger screens, display TabsList */}
                 <div className="hidden md:flex gap-2 justify-start">
                   <TabsList>
-                    <TabsTrigger id="step-1" value="Landing" className="p-2 text-sm">Info</TabsTrigger>
-                    <TabsTrigger id="step-2" value="User" className="p-2 text-sm">User Demographics</TabsTrigger>
-                    <TabsTrigger id="step-3" value="Author" className="p-2 text-sm">Author Performance</TabsTrigger>
-                    <TabsTrigger id="step-4" value="Revenue" className="p-2 text-sm">Revenue Attribution</TabsTrigger>
-                    <TabsTrigger id="step-5" value="Features" className="p-2 text-sm">Features</TabsTrigger>
+                    <TabsTrigger id="step-1" value="Landing" className="p-2 text-sm rounded">Info</TabsTrigger>
+                    <TabsTrigger id="step-2" value="User" className="p-2 text-sm rounded">User Demographics</TabsTrigger>
+                    <TabsTrigger id="step-3" value="Author" className="p-2 text-sm rounded">Author Performance</TabsTrigger>
+                    <TabsTrigger id="step-4" value="Revenue" className="p-2 text-sm rounded">Revenue Attribution</TabsTrigger>
+                    {/* <TabsTrigger id="step-5" value="Features" className="p-2 text-sm rounded">Features</TabsTrigger> */}
                     <TabsTrigger value="Trends" className="p-2 text-sm">Trends</TabsTrigger>
+                    <TabsTrigger id="step-6" value="Click" className="p-2 text-sm rounded">Click Prediction</TabsTrigger>
                   </TabsList>
-                  <div className="text-center my-5">
-                    <Button onClick={generatePDF}>Download Report</Button>
+                  <div className="text-center text-sm">
+                    <Button onClick={generatePDF} className='rounded bg-white text-black hover:bg-white hover:text-black'>Download Report</Button>
                   </div>
                 </div>
 
@@ -144,6 +146,7 @@ function Dashboard() {
                       <SelectItem value="Revenue">Revenue Attribution</SelectItem>
                       <SelectItem value="Features">Features</SelectItem>
                       <SelectItem value="Trends">Trends</SelectItem>
+                      <SelectItem value="Click">Click</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -184,6 +187,11 @@ function Dashboard() {
             <TabsContent value="Trends">
               <div id="tab-Trends">
                 <Trends />
+                </div>
+                </TabsContent>
+            <TabsContent value="Click">
+              <div id="tab-Click">
+                <Click />
               </div>
             </TabsContent>
             

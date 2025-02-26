@@ -226,10 +226,10 @@ const TourGuide = ({ start, setStartTour, onTourEnd }: TourGuideProps) => {
       debug
       styles={{
         overlay: {
-          border: "4px solid lightblue p-1",
+          border: "4px solid white p-1",
         },
         spotlight: {
-          border: "2px solid lightblue",
+          border: "2px solid white",
         },
         buttonClose: {
           marginTop: "5px",
@@ -239,9 +239,9 @@ const TourGuide = ({ start, setStartTour, onTourEnd }: TourGuideProps) => {
         buttonNext: {
           outline: "2px solid transparent",
           outlineOffset: "2px",
-          backgroundColor: "#1c7bd4",
+          backgroundColor: "#FFFFFF",
           borderRadius: "5px",
-          color: "#FFFFFF",
+          color: "#000000",
         },
         buttonSkip: {
           color: "A3A3A3",
@@ -264,7 +264,7 @@ const TourGuide = ({ start, setStartTour, onTourEnd }: TourGuideProps) => {
       }}
       locale={{
         back: (
-          <p className="font-bold focus:ring-transparent focus-visible:outline-none justify-start">
+          <p className="font-bold focus:ring-transparent focus-visible:outline-none justify-start text-white">
             {`<-`}
           </p>
         ),
