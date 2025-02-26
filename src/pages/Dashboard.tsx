@@ -44,7 +44,7 @@ function Date({ onMonthSelect, selectedMonth }: { onMonthSelect: (date: Date) =>
 function Dashboard() {
   const [selectedMonth, setSelectedMonth] = useState<Date | undefined>(undefined);
   const [selectedTab, setSelectedTab] = useState<string>("Landing");
-  const [startTour, setStartTour] = useState(false);  // Don't trigger the tour immediately
+  const [startTour, setStartTour] = useState(true);  
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {

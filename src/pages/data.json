@@ -174,47 +174,44 @@
         "title": "News Topic Counts by Source",
         "sources": [
           {
-            "source": "bbc-news",
+            "source": "BBC-News",
             "topics": [
-              { "topic": "kanye", "count": 10 },
-              { "topic": "grammy", "count": 56 },
-              { "topic": "elections", "count": 34 },
-              { "topic": "climate", "count": 22 },
-              { "topic": "AI", "count": 45 }
+              { "topic": "Elections", "count": 34 },
+              { "topic": "Climate", "count": 22 },
+              { "topic": "AI", "count": 45 },
+              { "topic": "Renewable Energy", "count": 30 }
             ]
           },
           {
-            "source": "abc-news",
+            "source": "ABC-News",
             "topics": [
-              { "topic": "kanye", "count": 18 },
-              { "topic": "grammy", "count": 43 },
-              { "topic": "stock market", "count": 27 },
-              { "topic": "football", "count": 52 },
-              { "topic": "COVID", "count": 38 }
+              { "topic": "Stock Market", "count": 27 },
+              { "topic": "Football", "count": 52 },
+              { "topic": "COVID", "count": 38 },
+              { "topic": "Healthcare", "count": 33 }
             ]
           },
           {
-            "source": "new-york-magazine",
+            "source": "New-York-Magazine",
             "topics": [
-              { "topic": "kanye", "count": 25 },
-              { "topic": "grammy", "count": 60 },
-              { "topic": "politics", "count": 47 },
-              { "topic": "fashion", "count": 29 },
-              { "topic": "technology", "count": 33 }
+              { "topic": "Politics", "count": 47 },
+              { "topic": "Fashion", "count": 29 },
+              { "topic": "Technology", "count": 33 },
+              { "topic": "Entertainment", "count": 40 }
             ]
           },
           {
-            "source": "rt-news",
+            "source": "RT-News",
             "topics": [
-              { "topic": "kanye", "count": 12 },
-              { "topic": "grammy", "count": 50 },
-              { "topic": "war", "count": 40 },
-              { "topic": "economy", "count": 36 },
-              { "topic": "crypto", "count": 44 }
+              { "topic": "War", "count": 40 },
+              { "topic": "Economy", "count": 36 },
+              { "topic": "Crypto", "count": 44 },
+              { "topic": "Geopolitics", "count": 39 }
             ]
           }
         ]
       }
+      
       
   ]
 }

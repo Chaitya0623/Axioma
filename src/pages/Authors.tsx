@@ -42,7 +42,7 @@ export function Overperformance({ selectedMonth }: { selectedMonth?: Date }) {
     const authorData = graphData[author as keyof typeof graphData] as Partial<AuthorData>;
   
     acc[author] = {
-      overperformance: authorData  
+      overperformance: authorData
         ? (authorData[selectedMonthName as keyof typeof authorData] as number) || 0
         : 0,
       fill: authorData?.fill || '', // Default value ensures 'fill' is a string
@@ -157,7 +157,7 @@ export function Post({ selectedMonth }: { selectedMonth?: Date }) {
 
   // Sort the data by articles in descending order
   const sortedData = monthData.sort((a, b) => b.articles - a.articles);
-  // console.log(monthData)
+  console.log(monthData)
 
   return (
     <Card>
