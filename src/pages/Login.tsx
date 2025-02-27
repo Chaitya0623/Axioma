@@ -16,7 +16,7 @@ function Login({ onLoginSuccess }: LoginProps) {
   const handleLogin = async () => {
 
     const apiUrl = process.env.NODE_ENV === 'production' 
-  ? 'https://newsroom-analytics-demo.vercel.app/login' 
+  ? 'https://axioma-six.vercel.app/login' 
   : 'http://localhost:5000/login';
 
 try {
