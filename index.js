@@ -31,7 +31,7 @@ app.post('/signup', async (req, res) => {
 
   try {
     const { data: existingUser } = await supabase
-      .from('axioma')
+      .from('users')
       .select('*')
       .eq('username', username)
       .single();
