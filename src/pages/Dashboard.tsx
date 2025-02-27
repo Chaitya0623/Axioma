@@ -128,7 +128,7 @@ function Dashboard() {
                     <TabsTrigger id="step-3" value="Author" className="p-2 text-sm rounded">Author Performance</TabsTrigger>
                     <TabsTrigger id="step-4" value="Revenue" className="p-2 text-sm rounded">Revenue Attribution</TabsTrigger>
                     {/* <TabsTrigger id="step-5" value="Features" className="p-2 text-sm rounded">Features</TabsTrigger> */}
-                    <TabsTrigger value="Trends" className="p-2 text-sm">Trends</TabsTrigger>
+                    <TabsTrigger id="step-5" value="Trends" className="p-2 text-sm rounded">Trends</TabsTrigger>
                     <TabsTrigger id="step-6" value="Click" className="p-2 text-sm rounded">Click Prediction</TabsTrigger>
                   </TabsList>
                   <div className="text-center text-sm">
@@ -192,8 +192,8 @@ function Dashboard() {
             <TabsContent value="Trends">
               <div id="tab-Trends">
                 <Trends />
-                </div>
-                </TabsContent>
+              </div>
+            </TabsContent>
             <TabsContent value="Click">
               <div id="tab-Click">
                 <Click />
