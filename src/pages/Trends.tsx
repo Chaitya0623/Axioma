@@ -147,25 +147,21 @@ interface Topic {
   
 
 const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics }) => {
-    // Flatten the newsroom topics into a single array of topic names (strings)
-    const allNewsroomTopics = newsroomTopics.flatMap(newsroom => newsroom.topics);
-    const topicsOnly = allNewsroomTopics.map(newsTopic => newsTopic.topic);
-  
-    // Function to calculate percentage
+
+    const topicsOnly = newsroomTopics.map(newsTopic => newsTopic.topic);
+    
     const calculatePercentage = (platformTopics: { topic: string, count: number }[]) => {
-      // Extract the 'topic' name directly from platformTopics
+     
       const platformNames = platformTopics.map((platform) => platform.topic);
   
       // Find the matching topics in the flattened list of newsroom topics
       const matchingTopics = platformNames.filter((topicName) =>
-        topicsOnly.includes(topicName) // Check if the topic exists in any newsroom's topics
+        topicsOnly.includes(topicName) 
       );
   
-      // Return the calculated percentage
       return (matchingTopics.length / platformNames.length) * 100;
     };
   
-    // Example: Calculate percentage for each platform
     const googlePercentage = calculatePercentage(trends.google.trending_topics);
     const instagramPercentage = calculatePercentage(trends.instagram.trending_topics);
     const truthSocialPercentage = calculatePercentage(trends.truthSocial.trending_topics);
@@ -182,7 +178,7 @@ const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics 
               style={{
                 width: '100%',
                 height: '20px',
-                backgroundColor: 'oklch(0.373 0.034 259.733)', // Background color (the scale)
+                backgroundColor: 'oklch(0.373 0.034 259.733)', 
                 borderRadius: '5px',
                 overflow: 'hidden', // Ensure the inner bar is clipped to the rounded corners
               }}
@@ -191,7 +187,7 @@ const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics 
                 style={{
                   width: `${googlePercentage}%`,
                   height: '100%',
-                  backgroundColor: '#FFEB3B', // Google color
+                  backgroundColor: '#FFEB3B', 
                   transition: 'width 0.3s ease-in-out',
                 }}
               ></div>
@@ -203,16 +199,16 @@ const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics 
               style={{
                 width: '100%',
                 height: '20px',
-                backgroundColor: 'oklch(0.373 0.034 259.733)', // Background color (the scale)
+                backgroundColor: 'oklch(0.373 0.034 259.733)', 
                 borderRadius: '5px',
-                overflow: 'hidden', // Ensure the inner bar is clipped to the rounded corners
+                overflow: 'hidden', 
               }}
             >
               <div
                 style={{
                   width: `${instagramPercentage}%`,
                   height: '100%',
-                  backgroundColor: '#FF69B4', // Instagram color
+                  backgroundColor: '#FF69B4', 
                   transition: 'width 0.3s ease-in-out',
                 }}
               ></div>
@@ -224,16 +220,16 @@ const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics 
               style={{
                 width: '100%',
                 height: '20px',
-                backgroundColor: 'oklch(0.373 0.034 259.733)', // Background color (the scale)
+                backgroundColor: 'oklch(0.373 0.034 259.733)', 
                 borderRadius: '5px',
-                overflow: 'hidden', // Ensure the inner bar is clipped to the rounded corners
+                overflow: 'hidden', 
               }}
             >
               <div
                 style={{
                   width: `${truthSocialPercentage}%`,
                   height: '100%',
-                  backgroundColor: '#1DA1F2', // Truth Social color
+                  backgroundColor: '#1DA1F2', 
                   transition: 'width 0.3s ease-in-out',
                 }}
               ></div>
@@ -249,7 +245,6 @@ const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics 
 const getTotalCount = (topic: string) => {
   let totalCount = 0;
 
-  console.log(`Calculating total count for topic: ${topic}`);
 
   // Get all platform keys from the data object
   const platforms = Object.keys(data) as string[];
@@ -257,21 +252,15 @@ const getTotalCount = (topic: string) => {
   platforms.forEach((platform) => {
     const platformData = (data as any)[platform]?.trending_topics; // Type assertion
 
-    // Log to confirm we're getting the platform data
-    console.log(`Platform: ${platform}, Data:`, platformData);
-
     if (platformData) {
       platformData.forEach((t: { topic: string; count: number }) => {
         if (t.topic === topic) {
           totalCount += t.count;
-          // Log the data for the topic in each platform
-          console.log(`Found topic on ${platform} - Topic: ${t.topic}, Count: ${t.count}`);
         }
       });
     }
   });
 
-  console.log(`Total count for topic '${topic}': ${totalCount}`);
 
   return totalCount;
 };
@@ -311,7 +300,6 @@ const getTotalCount = (topic: string) => {
       .filter((topic) => topic.type === 'rising' && getTotalCount(topic.topic) <= untappedThreshold)
       .sort((a, b) => getTotalCount(b.topic) - getTotalCount(a.topic)); // Sort by lowest cumulative count
 
-      console.log(highDemandTopics)
   
     return (
       <div className="space-y-8">
