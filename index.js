@@ -1,7 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 import { createClient } from '@supabase/supabase-js';
 
@@ -13,13 +12,6 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.NEXT_PUBLIC_
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors({
-  origin: ["https://axioma-six.vercel.app", "https://newsroom-analytics-demo.vercel.app", "http://localhost:5173"],
-  methods: ["GET", "POST"]
-}));
-app.use(bodyParser.json());
-
 async function checkDatabaseConnection() {
   try {
     const { data, error } = await supabase.from('users').select('*').limit(1);
@@ -30,6 +22,13 @@ async function checkDatabaseConnection() {
   }
 }
 checkDatabaseConnection();
+
+// Middleware
+app.use(cors({
+  origin: ["https://axioma-six.vercel.app", "https://newsroom-analytics-demo.vercel.app", "http://localhost:5173"],
+  methods: ["GET", "POST"]
+}));
+app.use(bodyParser.json());
 
 // Home Route
 app.get('/', (req, res) => {
@@ -51,11 +50,10 @@ app.post('/signup', async (req, res) => {
       return res.status(400).json({ message: 'Username already taken' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
+    // No hashing, storing plain text password
     const { error } = await supabase
       .from('users')
-      .insert([{ username, password: hashedPassword }]);
+      .insert([{ username, password }]);
 
     if (error) throw error;
 
@@ -69,19 +67,20 @@ app.post('/signup', async (req, res) => {
 // Login Route
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
+
   try {
-    const { data: user } = await supabase
+    const { data: user, error } = await supabase
       .from('users')
       .select('*')
       .eq('username', username)
       .single();
 
-      if (!user) {
+    if (!user) {
       return res.status(400).json({ message: 'Invalid username or password' });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
+    // Directly compare the password without bcrypt
+    if (user.password !== password) {
       return res.status(400).json({ message: 'Invalid username or password' });
     }
 
