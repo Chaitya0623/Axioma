@@ -1,15 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import { TrendingUp } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Card,  CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { Table,  TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import data from './data.json';
 import Plot from "./Plots"
 
 interface Topic {
+  topics: any;
   topic: string;
   count: number;
   source: string;
+  type?: string;
 }
 
 interface SourceData {
@@ -95,7 +97,7 @@ const SocialMedia = ({ socialMediaData }: { socialMediaData: SourceData[] }) => 
         .attr("fill", (d: Topic) => colorScale(d.source)) // Apply the color scale
         .attr("font-family", "Arial, sans-serif")
         .style("cursor", "pointer")
-        .on("mouseover", (event: any, d: Topic) => {
+        .on("mouseover", ( d: Topic) => {
           tooltip.transition().duration(200).style("visibility", "visible");
           tooltip.html(`Topic: ${d.topic}<br/>Total Count: ${d.count}<br/>Source: ${d.source}`);
         })
@@ -243,54 +245,37 @@ const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics 
   };
   
 
-//   const getTotalCount = (topic: string) => {
-//     let totalCount = 0;
-  
-//     // Ensure trends.google, trends.instagram, and trends.twitter are defined and contain trending_topics
-//     ['google', 'instagram', 'twitter'].forEach((platform) => {
-//       const platformData = data[platform];
-  
-//       if (platformData && Array.isArray(platformData.trending_topics)) {
-//         platformData.trending_topics.forEach((t) => {
-//           if (t.topic === topic) {
-//             totalCount += t.count;
-//           }
-//         });
-//       }
-//     });
-  
-//     return totalCount;
-//   };
-  
+
 const getTotalCount = (topic: string) => {
-    let totalCount = 0;
-    
-    // Logging to make sure we're going through each platform
-    console.log(`Calculating total count for topic: ${topic}`);
-  
-    // Sum the counts for the given topic across all platforms
-    ['google', 'instagram', 'twitter'].forEach((platform) => {
-      const platformData = data[platform]?.trending_topics;
-  
-      // Log to confirm we're getting the platform data
-      console.log(`Platform: ${platform}, Data:`, platformData);
-  
-      if (platformData) {
-        platformData.forEach((t) => {
-          if (t.topic === topic) {
-            totalCount += t.count;
-            // Log the data for the topic in each platform
-            console.log(`Found topic on ${platform} - Topic: ${t.topic}, Count: ${t.count}`);
-          }
-        });
-      }
-    });
-  
-    console.log(`Total count for topic '${topic}': ${totalCount}`);
-    
-    return totalCount;
-  };
-  
+  let totalCount = 0;
+
+  console.log(`Calculating total count for topic: ${topic}`);
+
+  // Get all platform keys from the data object
+  const platforms = Object.keys(data) as string[];
+
+  platforms.forEach((platform) => {
+    const platformData = (data as any)[platform]?.trending_topics; // Type assertion
+
+    // Log to confirm we're getting the platform data
+    console.log(`Platform: ${platform}, Data:`, platformData);
+
+    if (platformData) {
+      platformData.forEach((t: { topic: string; count: number }) => {
+        if (t.topic === topic) {
+          totalCount += t.count;
+          // Log the data for the topic in each platform
+          console.log(`Found topic on ${platform} - Topic: ${t.topic}, Count: ${t.count}`);
+        }
+      });
+    }
+  });
+
+  console.log(`Total count for topic '${topic}': ${totalCount}`);
+
+  return totalCount;
+};
+
 
   const Topics = () => {
     // Ensure data.graphs and sources are available before accessing them
@@ -308,6 +293,7 @@ const getTotalCount = (topic: string) => {
     });
   
     // Create an array of unique topics
+    
     const uniqueTopics = Object.values(uniqueTopicsMap);
   
     // Threshold for high demand and untapped topics
@@ -380,11 +366,75 @@ const getTotalCount = (topic: string) => {
     );
   };
   
+
+
+// const Trends = () => {
+//   const socialMediaData = data.graphs
+//     .find((graph: any) => graph.title === "Social Media Trends")
+//     ?.sources?.map((sourceData: any) => ({
+//       source: sourceData.source,
+//       topics: sourceData.topics.map((topic: { topic: string; count: number }) => ({
+//         ...topic,
+//         source: sourceData.source, // Add source to each topic
+//       })),
+//     })) || [];
   
-  
+//   const newsroomTopics = data.graphs.find((graph: any) => graph.title === "News Topic Counts by Source")?.sources;
+
+//   if (!socialMediaData || socialMediaData.length === 0) {
+//     return <div>No social media data available.</div>; // Optional fallback message
+//   }
+
+//   // Prepare the `trends` object to pass to InfluenceChart
+//   const trends = {
+//     google: {
+//       trending_topics: socialMediaData[0].topics || [],
+//     },
+//     instagram: {
+//       trending_topics: socialMediaData[1].topics || [],
+//     },
+//     truthSocial: {
+//       trending_topics: socialMediaData[2].topics || [],
+//     }
+//   };
+
+//   return (
+//     <div>
+//       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+//         <SocialMedia socialMediaData={socialMediaData} />
+//         <InfluenceChart trends={trends} newsroomTopics={newsroomTopics} />
+//         <Topics />
+//         <Plot />
+//       </div>
+//     </div>
+//   );
+// };
+
 const Trends = () => {
-  const socialMediaData = data.graphs.find((graph: any) => graph.title === "Social Media Trends")?.sources;
-  const newsroomTopics = data.graphs.find((graph: any) => graph.title === "News Topic Counts by Source")?.sources;  // Example, modify based on your actual data
+  const socialMediaData = data.graphs
+    .find((graph: any) => graph.title === "Social Media Trends")
+    ?.sources?.map((sourceData: any) => ({
+      source: sourceData.source,
+      topics: sourceData.topics.map((topic: { topic: string; count: number }) => ({
+        ...topic,
+        source: sourceData.source, // Add source to each topic
+      })),
+    })) || [];
+
+  // Safely extract newsroomTopics with a similar pattern
+  const newsroomTopics = data.graphs
+    .find((graph: any) => graph.title === "News Topic Counts by Source")
+    ?.sources
+    ?.flatMap((sourceData: any) =>
+      sourceData.topics.map((topic: { topic: string; count: number }) => ({
+        ...topic,
+        source: sourceData.source, // Add source to each topic
+      }))
+    ) || []; // Fallback to empty array if no matching graph or sources are found
+
+  if (!socialMediaData || socialMediaData.length === 0) {
+    return <div>No social media data available.</div>; // Optional fallback message
+  }
 
   // Prepare the `trends` object to pass to InfluenceChart
   const trends = {
@@ -398,13 +448,14 @@ const Trends = () => {
       trending_topics: socialMediaData[2].topics || [],
     }
   };
+
   return (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <SocialMedia socialMediaData={socialMediaData} />
-        <InfluenceChart trends={trends} newsroomTopics={newsroomTopics}/>
-        <Topics/>
-        <Plot/>
+        <InfluenceChart trends={trends} newsroomTopics={newsroomTopics} />
+        <Topics />
+        <Plot />
       </div>
     </div>
   );
