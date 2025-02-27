@@ -20,6 +20,17 @@ app.use(cors({
 }));
 app.use(bodyParser.json());
 
+async function checkDatabaseConnection() {
+  try {
+    const { data, error } = await supabase.from('users').select('*').limit(1);
+    if (error) throw error;
+    console.log("✅ Connected to Supabase PostgreSQL!");
+  } catch (err) {
+    console.error("❌ Failed to connect to Supabase PostgreSQL:", err);
+  }
+}
+checkDatabaseConnection();
+
 // Home Route
 app.get('/', (req, res) => {
   res.send('Welcome to the Express server connected to Supabase PostgreSQL!');
@@ -58,7 +69,6 @@ app.post('/signup', async (req, res) => {
 // Login Route
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-
   try {
     const { data: user } = await supabase
       .from('users')
@@ -66,7 +76,7 @@ app.post('/login', async (req, res) => {
       .eq('username', username)
       .single();
 
-    if (!user) {
+      if (!user) {
       return res.status(400).json({ message: 'Invalid username or password' });
     }
 
@@ -81,6 +91,12 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+if (process.env.NODE_ENV !== "vercel") {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+  });
+}
 
 // Export for Vercel
 export default app;
