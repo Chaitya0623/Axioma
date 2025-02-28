@@ -23,7 +23,7 @@ import { format } from "date-fns";
 // Overperformance
 export function Overperformance({ selectedMonth }: { selectedMonth?: Date }) {
   // Default to "Jan" if no month is provided
-  const selectedMonthName = selectedMonth ? format(selectedMonth, "MMM") : "Jan"; 
+  const selectedMonthName = selectedMonth ? format(selectedMonth, "MMM") : "Jan";
 
   // Find the "Article Overperformance" graph data
   const graphData = dataJson.graphs.find(graph => graph.title === "Article Overperformance")?.data;
@@ -37,17 +37,17 @@ export function Overperformance({ selectedMonth }: { selectedMonth?: Date }) {
     [key: string]: number | string; // Generic properties
     fill: string; // Force 'fill' to always be a string
   };
-  
+
   const monthData = Object.keys(graphData).reduce((acc, author) => {
     const authorData = graphData[author as keyof typeof graphData] as Partial<AuthorData>;
-  
+
     acc[author] = {
       overperformance: authorData
         ? (authorData[selectedMonthName as keyof typeof authorData] as number) || 0
         : 0,
       fill: authorData?.fill || '', // Default value ensures 'fill' is a string
     };
-  
+
     return acc;
   }, {} as Record<string, { overperformance: number; fill: string }>);
 
@@ -102,7 +102,7 @@ export function Overperformance({ selectedMonth }: { selectedMonth?: Date }) {
 }
 
 
-  
+
 const postchart = {
   overperformance: {
     label: "Overperformance",
@@ -175,7 +175,7 @@ export function Post({ selectedMonth }: { selectedMonth?: Date }) {
             }}
           >
             <YAxis
-              dataKey="author" 
+              dataKey="author"
               type="category"
               tickLine={false}
               tickMargin={10}
@@ -368,10 +368,10 @@ const Authors: React.FC<UsersProps> = ({ selectedMonth }) =>{
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
     <VisitorStoryRatio/>
         <Post selectedMonth={selectedMonth}/>
-        
+
         <Overperformance selectedMonth={selectedMonth}/>
         <PerAuthor/>
-        
+
     </div>
     </>
   )

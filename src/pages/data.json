@@ -132,7 +132,7 @@
           "Politics": {"Jan": 120, "Feb": 1550, "Mar": 1600, "Apr": 165, "May": 170, "Jun": 175, "Jul": 180, "Aug": 185, "Sep": 190, "Oct": 195, "Nov": 200, "Dec": 205},
           "Arts": {"Jan": 70, "Feb": 750, "Mar": 800, "Apr": 850, "May": 90, "Jun": 95, "Jul": 100, "Aug": 105, "Sep": 110, "Oct": 115, "Nov": 120, "Dec": 125}
         }
-      },      
+      },
       {
         "title": "Off Platform Analysis",
         "categories": {
@@ -182,44 +182,16 @@
       },
       {
         "title": "News Topic Counts by Source",
-        "sources": [
-          {
-            "source": "BBC-News",
-            "topics": [
-              { "topic": "Elections", "count": 34 },
-              { "topic": "Climate", "count": 22 },
-              { "topic": "AI", "count": 45 },
-              { "topic": "Renewable Energy", "count": 30 }
-            ]
-          },
-          {
-            "source": "ABC-News",
-            "topics": [
-              { "topic": "Stock Market", "count": 27 },
-              { "topic": "Football", "count": 52 },
-              { "topic": "COVID", "count": 38 },
-              { "topic": "Healthcare", "count": 33 }
-            ]
-          },
-          {
-            "source": "New-York-Magazine",
-            "topics": [
-              { "topic": "Politics", "count": 47 },
-              { "topic": "Fashion", "count": 29 },
-              { "topic": "Technology", "count": 33 },
-              { "topic": "Entertainment", "count": 40 }
-            ]
-          },
-          {
-            "source": "RT-News",
-            "topics": [
-              { "topic": "War", "count": 40 },
-              { "topic": "Economy", "count": 36 },
-              { "topic": "Crypto", "count": 44 },
-              { "topic": "Geopolitics", "count": 39 }
-            ]
-          }
-        ]
+        "data": {
+          "Elections": { "count": 34 },
+          "AI": { "count": 45 },
+          "Renewable Energy": { "count": 30 },
+          "Football": { "count": 52 },
+          "COVID": { "count": 38 },
+          "Politics": { "count": 47 },
+          "Technology": { "count": 33 },
+          "Crypto": { "count": 44 }
+        }
       },
       {
         "title": "Social Media Trends",

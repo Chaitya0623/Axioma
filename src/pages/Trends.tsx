@@ -4,7 +4,7 @@ import { TrendingUp } from "lucide-react";
 import { Card,  CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Table,  TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import data from './data.json';
-import Plot from "./Plots"
+import Plots from "./Plots";
 
 interface Topic {
   topics: any;
@@ -25,7 +25,7 @@ const SocialMedia = ({ socialMediaData }: { socialMediaData: SourceData[] }) => 
       width: window.innerWidth,
       height: window.innerHeight,
     });
-  
+
     useEffect(() => {
       const handleResize = () => {
         setDimensions({ width: window.innerWidth, height: window.innerHeight });
@@ -33,13 +33,13 @@ const SocialMedia = ({ socialMediaData }: { socialMediaData: SourceData[] }) => 
       window.addEventListener("resize", handleResize);
       return () => window.removeEventListener("resize", handleResize);
     }, []);
-  
+
     useEffect(() => {
       if (!svgRef.current) return;
-  
+
       const width = dimensions.width / 5;
       const height = dimensions.height / 5;
-  
+
       const svg = d3.select(svgRef.current)
         .attr("width", "90%")
         .attr("height", "80%")
@@ -47,34 +47,34 @@ const SocialMedia = ({ socialMediaData }: { socialMediaData: SourceData[] }) => 
         .style("background-color", "transparent")
         .style("display", "block")
         .style("margin", "auto");
-  
+
       // Flatten and process the social media data
       const flattenedData: Topic[] = socialMediaData.flatMap((sourceData) =>
         sourceData.topics.map((topic) => ({ ...topic, source: sourceData.source }))
       );
-  
+
       flattenedData.sort((a, b) => b.count - a.count);
-  
+
       const maxCount = d3.max(flattenedData, (d: Topic) => d.count) || 0;
       const minCount = d3.min(flattenedData, (d: Topic) => d.count) || 0;
-  
+
       // Create a responsive font size scale based on count
       const sizeScale = d3.scaleSqrt()
         .domain([minCount, maxCount])
         .range([0, Math.min(width, height) /5]); // Ensure words don't overflow
-  
+
       // Create a color scale for each source
       const colorScale = d3.scaleOrdinal()
         .domain(["instagram", "google", "truthSocial"])
         .range(["#FF69B4", "#FFEB3B", "#1DA1F2"]);
-  
+
       // Set up the force simulation
       d3.forceSimulation(flattenedData)
       .force("center", d3.forceCenter(width / 2, height/2)) // Place at center
       .force("charge", d3.forceManyBody().strength(20)) // Repulsion between nodes
       .force("collide", d3.forceCollide().radius((d: any) => sizeScale(d.count)*3)) // Collision force to prevent overlap
       .on("tick", ticked);
-  
+
       // Tooltip setup
       const tooltip = d3.select("body").append("div")
         .attr("class", "tooltip")
@@ -85,7 +85,7 @@ const SocialMedia = ({ socialMediaData }: { socialMediaData: SourceData[] }) => 
         .style("padding", "5px")
         .style("border-radius", "5px")
         .style("font-size", "14px");
-  
+
       // Add words to the SVG
       const words = svg.selectAll(".word")
         .data(flattenedData)
@@ -108,7 +108,7 @@ const SocialMedia = ({ socialMediaData }: { socialMediaData: SourceData[] }) => 
         .on("mouseout", () => {
           tooltip.transition().duration(200).style("visibility", "hidden");
         });
-  
+
       // Update the positions of the words on each tick of the simulation
       function ticked() {
         words
@@ -116,7 +116,7 @@ const SocialMedia = ({ socialMediaData }: { socialMediaData: SourceData[] }) => 
           .attr("y", (d: any) => Math.max(0, Math.min(height*1.2 - sizeScale(d.count), d.y))); // Prevent words from going out of bounds vertically
       }
     }, [socialMediaData, dimensions]);
-  
+
     return (
       <Card>
         <CardHeader className="items-center pb-0">
@@ -126,46 +126,46 @@ const SocialMedia = ({ socialMediaData }: { socialMediaData: SourceData[] }) => 
       </Card>
     );
   };
-  
-  
-  
+
+
+
 
 interface Topic {
     name: string;
   }
-  
+
   interface TrendsData {
     google: { trending_topics: Topic[] };
     instagram: { trending_topics: Topic[] };
     truthSocial: { trending_topics: Topic[] };
   }
-  
+
   interface InfluenceChartProps {
     trends: TrendsData;
     newsroomTopics: Topic[];
   }
-  
+
 
 const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics }) => {
 
     const topicsOnly = newsroomTopics.map(newsTopic => newsTopic.topic);
-    
+
     const calculatePercentage = (platformTopics: { topic: string, count: number }[]) => {
-     
+
       const platformNames = platformTopics.map((platform) => platform.topic);
-  
+
       // Find the matching topics in the flattened list of newsroom topics
       const matchingTopics = platformNames.filter((topicName) =>
-        topicsOnly.includes(topicName) 
+        topicsOnly.includes(topicName)
       );
-  
+
       return (matchingTopics.length / platformNames.length) * 100;
     };
-  
+
     const googlePercentage = calculatePercentage(trends.google.trending_topics);
     const instagramPercentage = calculatePercentage(trends.instagram.trending_topics);
     const truthSocialPercentage = calculatePercentage(trends.truthSocial.trending_topics);
-  
+
     return (
       <Card>
         <CardHeader className="items-center pb-0">
@@ -178,7 +178,7 @@ const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics 
               style={{
                 width: '100%',
                 height: '20px',
-                backgroundColor: 'oklch(0.373 0.034 259.733)', 
+                backgroundColor: 'oklch(0.373 0.034 259.733)',
                 borderRadius: '5px',
                 overflow: 'hidden', // Ensure the inner bar is clipped to the rounded corners
               }}
@@ -187,7 +187,7 @@ const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics 
                 style={{
                   width: `${googlePercentage}%`,
                   height: '100%',
-                  backgroundColor: '#FFEB3B', 
+                  backgroundColor: '#FFEB3B',
                   transition: 'width 0.3s ease-in-out',
                 }}
               ></div>
@@ -199,16 +199,16 @@ const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics 
               style={{
                 width: '100%',
                 height: '20px',
-                backgroundColor: 'oklch(0.373 0.034 259.733)', 
+                backgroundColor: 'oklch(0.373 0.034 259.733)',
                 borderRadius: '5px',
-                overflow: 'hidden', 
+                overflow: 'hidden',
               }}
             >
               <div
                 style={{
                   width: `${instagramPercentage}%`,
                   height: '100%',
-                  backgroundColor: '#FF69B4', 
+                  backgroundColor: '#FF69B4',
                   transition: 'width 0.3s ease-in-out',
                 }}
               ></div>
@@ -220,16 +220,16 @@ const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics 
               style={{
                 width: '100%',
                 height: '20px',
-                backgroundColor: 'oklch(0.373 0.034 259.733)', 
+                backgroundColor: 'oklch(0.373 0.034 259.733)',
                 borderRadius: '5px',
-                overflow: 'hidden', 
+                overflow: 'hidden',
               }}
             >
               <div
                 style={{
                   width: `${truthSocialPercentage}%`,
                   height: '100%',
-                  backgroundColor: '#1DA1F2', 
+                  backgroundColor: '#1DA1F2',
                   transition: 'width 0.3s ease-in-out',
                 }}
               ></div>
@@ -239,7 +239,7 @@ const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics 
       </Card>
     );
   };
-  
+
 
 
 const getTotalCount = (topic: string) => {
@@ -271,36 +271,36 @@ const getTotalCount = (topic: string) => {
     const allTopics = (data.graphs || []).flatMap((graph) =>
       (graph.sources || []).flatMap((source) => source.topics || [])
     );
-  
+
     // Remove duplicates by creating a Set of topics
     const uniqueTopicsMap: { [key: string]: any } = {};
-  
+
     allTopics.forEach((topic) => {
       if (!uniqueTopicsMap[topic.topic]) {
         uniqueTopicsMap[topic.topic] = topic; // Add only the first occurrence of the topic
       }
     });
-  
+
     // Create an array of unique topics
-    
+
     const uniqueTopics = Object.values(uniqueTopicsMap);
-  
+
     // Threshold for high demand and untapped topics
     const highDemandThreshold = 100;
     const untappedThreshold = 50;
-  
+
     // Identify high demand topics (trending + high cumulative count)
     const highDemandTopics = uniqueTopics
       .filter((topic) => topic.type === 'trending' && highDemandThreshold > getTotalCount(topic.topic)  )
       .sort((a, b) => getTotalCount(b.topic) - getTotalCount(a.topic)); // Sort by highest cumulative count
-      
-  
+
+
     // Identify untapped topics (rising + low cumulative count)
     const untappedTopics = uniqueTopics
       .filter((topic) => topic.type === 'rising' && getTotalCount(topic.topic) <= untappedThreshold)
       .sort((a, b) => getTotalCount(b.topic) - getTotalCount(a.topic)); // Sort by lowest cumulative count
 
-  
+
     return (
       <div className="space-y-8">
         <Card className="flex flex-col md:flex-row gap-8 p-6">
@@ -326,7 +326,7 @@ const getTotalCount = (topic: string) => {
               </tbody>
             </Table>
           </div>
-  
+
           {/* Untapped Topics Table */}
           <div className="w-full md:w-1/2">
             <CardTitle>Untapped Topics</CardTitle>
@@ -353,7 +353,7 @@ const getTotalCount = (topic: string) => {
       </div>
     );
   };
-  
+
 
 
 // const Trends = () => {
@@ -366,7 +366,7 @@ const getTotalCount = (topic: string) => {
 //         source: sourceData.source, // Add source to each topic
 //       })),
 //     })) || [];
-  
+
 //   const newsroomTopics = data.graphs.find((graph: any) => graph.title === "News Topic Counts by Source")?.sources;
 
 //   if (!socialMediaData || socialMediaData.length === 0) {
@@ -443,7 +443,7 @@ const Trends = () => {
         <SocialMedia socialMediaData={socialMediaData} />
         <InfluenceChart trends={trends} newsroomTopics={newsroomTopics} />
         <Topics />
-        <Plot />
+        <Plots />
       </div>
     </div>
   );

@@ -48,12 +48,12 @@ function Dashboard() {
   // const [selectedMonth, setSelectedMonth] = useState<Date | undefined>(undefined);
   const [selectedMonth] = useState<Date | undefined>(undefined);
   const [selectedTab, setSelectedTab] = useState<string>("Landing");
-  const [startTour, setStartTour] = useState(true);  // Don't trigger the tour immediately
+  const [startTour, setStartTour] = useState(false);  // Don't trigger the tour immediately
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     setLoaded(true);
-    
+
     // Check if the user has logged in and if they have seen the tour before
     const hasSeenTour = localStorage.getItem('hasSeenTour');
     if (!hasSeenTour) {
@@ -73,36 +73,36 @@ function Dashboard() {
   const generatePDF = async () => {
     const pdf = new jsPDF("p", "mm", "a4");
     const sections = ["Landing", "User", "Author", "Revenue", "Trends", "Click"];
-    
+
     // Save the original selectedTab to restore after generating the PDF
     const originalTab = selectedTab;
-  
+
     // Temporarily set the selectedTab to each section one by one to render content
     for (let i = 0; i < sections.length; i++) {
       setSelectedTab(sections[i]);  // Activate the current tab
       await new Promise((resolve) => setTimeout(resolve, 1700)); // 🕒 Small delay to ensure charts load
-      
+
       const element = document.getElementById(`tab-${sections[i]}`);
       if (!element) continue;
-  
+
       // Ensure the element is visible and rendered
       element.style.transform = "scale(1)";
-      element.style.opacity = "1"; 
-  
+      element.style.opacity = "1";
+
       const canvas = await html2canvas(element, { scale: 2, useCORS: true });
       const imgData = canvas.toDataURL("image/png");
-  
+
       if (i > 0) pdf.addPage();
       pdf.setFont("helvetica", "bold");
       pdf.setFontSize(16);
       pdf.text(sections[i], 95, 20);
-      
+
       pdf.addImage(imgData, "PNG", 10, 25, 190, 0); // Keeping default width
     }
-  
+
     // Restore the original selectedTab after generating the PDF
     setSelectedTab(originalTab);
-  
+
     pdf.save("dashboard-report.pdf");
   };
 
@@ -199,7 +199,7 @@ function Dashboard() {
                 <Click />
               </div>
             </TabsContent>
-            
+
 
           </Tabs>
         </div>
