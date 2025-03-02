@@ -234,6 +234,47 @@
         }
       },
       {
+        "title": "News Topic Counts",
+        "sources": [
+          {
+            "source": "BBC-News",
+            "topics": [
+              { "topic": "Elections", "count": 34 },
+              { "topic": "Climate", "count": 22 },
+              { "topic": "AI", "count": 45 },
+              { "topic": "Renewable Energy", "count": 30 }
+            ]
+          },
+          {
+            "source": "ABC-News",
+            "topics": [
+              { "topic": "Stock Market", "count": 27 },
+              { "topic": "Football", "count": 52 },
+              { "topic": "COVID", "count": 38 },
+              { "topic": "Healthcare", "count": 33 }
+            ]
+          },
+          {
+            "source": "New-York-Magazine",
+            "topics": [
+              { "topic": "Politics", "count": 47 },
+              { "topic": "Fashion", "count": 29 },
+              { "topic": "Technology", "count": 33 },
+              { "topic": "Entertainment", "count": 40 }
+            ]
+          },
+          {
+            "source": "RT-News",
+            "topics": [
+              { "topic": "War", "count": 40 },
+              { "topic": "Economy", "count": 36 },
+              { "topic": "Crypto", "count": 44 },
+              { "topic": "Geopolitics", "count": 39 }
+            ]
+          }
+        ]
+      },
+      {
         "title": "Social Media Trends",
         "sources": [
           {

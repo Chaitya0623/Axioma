@@ -85,7 +85,7 @@ interface Topic {
   export function SocialMedia() {
     return (
       <Card>
-        <CardHeader>
+        <CardHeader className="items-center pb-0">
           <CardTitle>Trending Topics on Social Media</CardTitle>
         </CardHeader>
         <CardContent>
@@ -115,12 +115,9 @@ interface Topic {
             </BarChart>
           </ChartContainer>
         </CardContent>
-        <CardFooter className="flex-col items-start gap-2 text-sm">
-          <div className="flex gap-2 font-medium leading-none">
-            Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-          </div>
+        <CardFooter className="flex-col items-center gap-2 text-sm">
           <div className="leading-none text-muted-foreground">
-            Showing top 7 topics based on cumulative counts
+            Top trending topics on different Social Media Platforms
           </div>
         </CardFooter>
       </Card>
@@ -367,7 +364,7 @@ const Trends = () => {
 
   // Safely extract newsroomTopics with a similar pattern
   const newsroomTopics = data.graphs
-    .find((graph: any) => graph.title === "News Topic Counts by Source")
+    .find((graph: any) => graph.title === "News Topic Counts")
     ?.sources
     ?.flatMap((sourceData: any) =>
       sourceData.topics.map((topic: { topic: string; count: number }) => ({
