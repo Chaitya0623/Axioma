@@ -95,7 +95,7 @@ interface Topic {
               data={chartData}
               layout="vertical"
               margin={{
-                left: 0,
+                left: 17,
               }}
             >
               <YAxis
@@ -117,7 +117,7 @@ interface Topic {
         </CardContent>
         <CardFooter className="flex-col items-center gap-2 text-sm">
           <div className="leading-none text-muted-foreground">
-            Top trending topics on different Social Media Platforms
+          Elections and COVID are the leading discussions, indicating heightened public interest in governance and health. Other key topics like Kanye, stock markets, and mental health suggest a mix of cultural, financial, and well-being concerns driving online conversations on social media platforms.
           </div>
         </CardFooter>
       </Card>
@@ -163,7 +163,7 @@ const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics 
     const truthSocialPercentage = calculatePercentage(trends.truthSocial.trending_topics);
 
     return (
-      <Card>
+      <Card className="relative">
         <CardHeader className="items-center pb-0">
                 <CardTitle >Influence Chart</CardTitle>
               </CardHeader>
@@ -232,6 +232,11 @@ const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics 
             </div>
           </div>
         </div>
+        <CardFooter className="flex-col items-center text-sm absolute inset-x-0 bottom-2 mt-auto">
+          <div className="leading-none text-muted-foreground">
+          Newsrooms publish 50% of their content from trending topics on Truth Social, 37.5% from Google, and 25% from Instagram. This indicates that Truth Social has the strongest influence on newsroom topic selection, while Google remains a significant driver of coverage.
+          </div>
+        </CardFooter>
       </Card>
     );
   };

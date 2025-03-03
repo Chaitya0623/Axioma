@@ -10,6 +10,7 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
+  ChartConfig,
 } from "../components/ui/chart";
 import { Bar, BarChart, XAxis, YAxis, Cell, LabelList } from "recharts";
 import data from './data.json';
@@ -26,9 +27,18 @@ const barColors = [
   "#FFC599", "#FFD1AD", "#FFDCC2", "#FFE6D6"
 ];
 
+
+  const chartConfig = {
+    topic: {
+      label: "Count",
+    },
+    // You can add other custom properties if needed
+  } satisfies ChartConfig;
+
 const Plots = () => {
   // Extract and transform data to an array format
-  const rawData = data.graphs.find(graph => graph.title === "News Topic Counts")?.data || {};
+  const rawData = data.graphs.find(graph => graph.title === "News Topic Counts of Articles")?.data || {};
+  console.log(rawData);
   const graphData: GraphData[] = Object.entries(rawData).map(([topic, values]) => ({
     topic,
     count: (values as { count: number }).count,
@@ -42,7 +52,7 @@ const Plots = () => {
         <CardTitle className="font-bold text-lg">Trending topics</CardTitle>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={{ /* Adjust your config here */ }}>
+        <ChartContainer config={chartConfig}>
           <BarChart
             data={graphData}
             layout="vertical"
