@@ -105,7 +105,7 @@ import { format } from "date-fns";
         </CardContent>
         <CardFooter className="flex-col text-center gap-2 text-base">
           <div className="leading-none text-muted-foreground">
-          Tracking online trends helps identify emerging topics before they go viral. Current discussions are dominated by Elections and COVID, indicating strong public interest in governance and health. Other trending topics reflect cultural, financial, and well-being concerns.
+            Understanding online trends helps anticipate shifts in public interest and adapt content strategies accordingly. With Elections and COVID driving discussions, it’s clear that governance and health remain top priorities. Identifying such trends early ensures our newsroom stays relevant while catering to audience needs.
           </div>
         </CardFooter>
       </Card>
@@ -359,7 +359,7 @@ const Plots = () => {
       </CardContent>
       <CardFooter className="flex-col text-center gap-2 text-base">
         <div className="leading-none text-muted-foreground">
-        While Football and Politics dominate discussions on other newsrooms, our platform sees higher engagement in Health and Environment. This highlights an opportunity to expand sports and political coverage to align with broader trends and attract a wider audience.
+          Other newsrooms are tapping into emerging trends like AI, while our platform remains strong in Health and Environment. Maintaining this focus is key, but exploring untapped trending topics can help broaden our reach.
         </div>
       </CardFooter>
     </Card>
