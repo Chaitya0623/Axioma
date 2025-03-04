@@ -302,15 +302,6 @@ const getTotalCount = (topic: string) => {
 
 
 const Trends = () => {
-  const socialMediaData = data.graphs
-    .find((graph: any) => graph.title === "Social Media Trends")
-    ?.sources?.map((sourceData: any) => ({
-      source: sourceData.source,
-      topics: sourceData.topics.map((topic: { topic: string; count: number }) => ({
-        ...topic,
-        source: sourceData.source, // Add source to each topic
-      })),
-    })) || [];
 
   // Define the type for transformed graph data
 interface GraphData {
