@@ -1,7 +1,7 @@
 "use client"
 
 import { TrendingUp } from "lucide-react"
-import { Bar, BarChart,  XAxis, YAxis, Cell, LabelList, PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts"
+import { Bar, BarChart,  XAxis, YAxis, Cell, PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts"
 
 import {
   Card,
@@ -16,9 +16,9 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-import React from "react";
 import { Table,  TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import data from './data.json';
+import { format } from "date-fns";
 
   // Flatten and aggregate topics
   const topics = data.graphs.flatMap(graph =>
@@ -131,20 +131,17 @@ import data from './data.json';
     if (!graphData) {
       return <div>No data available</div>;
     }
+    
+    const monthData = Object.entries(graphData).reduce((acc, [platform, monthlyData]) => {
+      acc.push({
+        platform,
+        count: monthlyData[selectedMonthName as keyof typeof monthlyData] || 0,
+      });
+      return acc;
+    }, [] as { platform: string; count: number}[]);
   
-    // Now, ensure each platform's data exists for the selected month
-    const monthData = {
-      Google: graphData.Google ? graphData.Google[selectedMonthName as keyof typeof graphData.Google] : 0,
-      Instagram: graphData.Instagram ? graphData.Instagram[selectedMonthName as keyof typeof graphData.Instagram] : 0,
-      Bluesky: graphData.Bluesky ? graphData.Bluesky[selectedMonthName as keyof typeof graphData.Bluesky] : 0,
-      Reddit: graphData.Reddit ? graphData.Reddit[selectedMonthName as keyof typeof graphData.Reddit] : 0,
-      Facebook: graphData.Facebook ? graphData.Facebook[selectedMonthName as keyof typeof graphData.Facebook] : 0
-    };
-  
-    // Sort the data for each platform based on the selected month
-    const sortedData = Object.entries(monthData)
-      .map(([platform, count]) => ({ platform, count }))
-      .sort((a, b) => b.count - a.count); // Sort descending by count
+    // Sort the data by visitors in descending order
+    const sortedData = monthData.sort((a, b) => b.count - a.count);
   
     // Extract the months with the highest and lowest engagement
     // const first = sortedData[0].platform;
