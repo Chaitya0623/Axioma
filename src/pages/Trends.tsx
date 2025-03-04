@@ -1,13 +1,11 @@
-
 "use client"
 
 import { TrendingUp } from "lucide-react"
-import { Bar, BarChart,  XAxis, YAxis } from "recharts"
+import { Bar, BarChart,  XAxis, YAxis, Cell, LabelList, PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts"
 
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -21,16 +19,6 @@ import {
 import React from "react";
 import { Table,  TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import data from './data.json';
-import Plots from "./Plots";
-
-interface Topic {
-  topics: any;
-  topic: string;
-  count: number;
-  source: string;
-  type?: string;
-}
-
 
   // Flatten and aggregate topics
   const topics = data.graphs.flatMap(graph =>
@@ -56,7 +44,7 @@ interface Topic {
   }));
 
   const sortedTopics = aggregatedTopics.sort((a, b) => b.count - a.count);
-  const top7Topics = sortedTopics.slice(0, 7);
+  const top7Topics = sortedTopics.slice(0, 5);
 
   const predefinedColors = [
     "#522500", // Example color 1
@@ -86,7 +74,7 @@ interface Topic {
     return (
       <Card>
         <CardHeader className="items-center pb-0">
-          <CardTitle>Trending Topics on Social Media</CardTitle>
+          <CardTitle className="font-bold text-lg">What’s Making Waves Online?</CardTitle>
         </CardHeader>
         <CardContent>
           <ChartContainer config={chartConfig}>
@@ -106,7 +94,7 @@ interface Topic {
                 axisLine={false}
                 tickFormatter={(value) => value || "Unknown"}  // Fallback to "Unknown" if value is undefined
               />
-              <XAxis dataKey="visitors" type="number" hide />
+              <XAxis dataKey="visitors" type="number" />
               <ChartTooltip
                 cursor={false}
                 content={<ChartTooltipContent hideLabel />}
@@ -115,131 +103,85 @@ interface Topic {
             </BarChart>
           </ChartContainer>
         </CardContent>
-        <CardFooter className="flex-col items-center gap-2 text-sm">
+        <CardFooter className="flex-col text-center gap-2 text-base">
           <div className="leading-none text-muted-foreground">
-          Elections and COVID are the leading discussions, indicating heightened public interest in governance and health. Other key topics like Kanye, stock markets, and mental health suggest a mix of cultural, financial, and well-being concerns driving online conversations on social media platforms.
+          Tracking online trends helps identify emerging topics before they go viral. Current discussions are dominated by Elections and COVID, indicating strong public interest in governance and health. Other trending topics reflect cultural, financial, and well-being concerns.
           </div>
         </CardFooter>
       </Card>
     );
   }
 
-
-
-interface Topic {
-    name: string;
-  }
-
-  interface TrendsData {
-    google: { trending_topics: Topic[] };
-    instagram: { trending_topics: Topic[] };
-    truthSocial: { trending_topics: Topic[] };
-  }
-
-  interface InfluenceChartProps {
-    trends: TrendsData;
-    newsroomTopics: Topic[];
-  }
-
-
-const InfluenceChart: React.FC<InfluenceChartProps> = ({ trends, newsroomTopics }) => {
-
-    const topicsOnly = newsroomTopics.map(newsTopic => newsTopic.topic);
-
-    const calculatePercentage = (platformTopics: { topic: string, count: number }[]) => {
-
-      const platformNames = platformTopics.map((platform) => platform.topic);
-
-      // Find the matching topics in the flattened list of newsroom topics
-      const matchingTopics = platformNames.filter((topicName) =>
-        topicsOnly.includes(topicName)
-      );
-
-      return (matchingTopics.length / platformNames.length) * 100;
+  const srcConfig = {
+    desktop: {
+      label: "Traffic",
+      color: "hsl(var(--ring))",
+    },
+  
+  } satisfies ChartConfig;
+  
+  export function InfluenceChart({ selectedMonth }: { selectedMonth?: Date }) {
+    // Default to "Jan" if no month is provided
+    const selectedMonthName = selectedMonth ? format(selectedMonth, "MMM") : "Jan"; 
+  
+    // Find the "User Demographics" graph data
+    const graphData = data.graphs.find(graph => graph.title === "Trending Conversations")?.data;
+  
+    // If graphData is undefined or null, handle it gracefully
+    if (!graphData) {
+      return <div>No data available</div>;
+    }
+  
+    // Now, ensure each platform's data exists for the selected month
+    const monthData = {
+      Google: graphData.Google ? graphData.Google[selectedMonthName as keyof typeof graphData.Google] : 0,
+      Instagram: graphData.Instagram ? graphData.Instagram[selectedMonthName as keyof typeof graphData.Instagram] : 0,
+      Bluesky: graphData.Bluesky ? graphData.Bluesky[selectedMonthName as keyof typeof graphData.Bluesky] : 0,
+      Reddit: graphData.Reddit ? graphData.Reddit[selectedMonthName as keyof typeof graphData.Reddit] : 0,
+      Facebook: graphData.Facebook ? graphData.Facebook[selectedMonthName as keyof typeof graphData.Facebook] : 0
     };
-
-    const googlePercentage = calculatePercentage(trends.google.trending_topics);
-    const instagramPercentage = calculatePercentage(trends.instagram.trending_topics);
-    const truthSocialPercentage = calculatePercentage(trends.truthSocial.trending_topics);
-
+  
+    // Sort the data for each platform based on the selected month
+    const sortedData = Object.entries(monthData)
+      .map(([platform, count]) => ({ platform, count }))
+      .sort((a, b) => b.count - a.count); // Sort descending by count
+  
+    // Extract the months with the highest and lowest engagement
+    // const first = sortedData[0].platform;
+    // const second = sortedData[1].platform;
+    // const least = sortedData[sortedData.length - 1].platform;
+    // const least2 = sortedData[sortedData.length - 2].platform;
+  
     return (
-      <Card className="relative">
+      <Card>
         <CardHeader className="items-center pb-0">
-                <CardTitle >Influence Chart</CardTitle>
-              </CardHeader>
-        <div className="p-10">
-          <div className="p-2">
-          <CardDescription className="p-2">Google: {googlePercentage.toFixed(2)}%</CardDescription>
-            <div
-              style={{
-                width: '100%',
-                height: '20px',
-                backgroundColor: '#495057',
-                borderRadius: '5px',
-                overflow: 'hidden', // Ensure the inner bar is clipped to the rounded corners
-              }}
-            >
-              <div
-                style={{
-                  width: `${googlePercentage}%`,
-                  height: '100%',
-                  backgroundColor: '#6f1d1b',
-                  transition: 'width 0.3s ease-in-out',
-                }}
-              ></div>
-            </div>
-          </div>
-          <div className="p-2">
-          <CardDescription className="p-2">Instagram: {instagramPercentage.toFixed(2)}%</CardDescription>
-            <div
-              style={{
-                width: '100%',
-                height: '20px',
-                backgroundColor: '#495057',
-                borderRadius: '5px',
-                overflow: 'hidden',
-              }}
-            >
-              <div
-                style={{
-                  width: `${instagramPercentage}%`,
-                  height: '100%',
-                  backgroundColor: '#bb9457',
-                  transition: 'width 0.3s ease-in-out',
-                }}
-              ></div>
-            </div>
-          </div>
-          <div className="p-2">
-            <CardDescription className="p-2">Truth Social: {truthSocialPercentage.toFixed(2)}% </CardDescription>
-            <div
-              style={{
-                width: '100%',
-                height: '20px',
-                backgroundColor: '#495057',
-                borderRadius: '5px',
-                overflow: 'hidden',
-              }}
-            >
-              <div
-                style={{
-                  width: `${truthSocialPercentage}%`,
-                  height: '100%',
-                  backgroundColor: '#ffe6a7',
-                  transition: 'width 0.3s ease-in-out',
-                }}
-              ></div>
-            </div>
-          </div>
-        </div>
-        <CardFooter className="flex-col items-center text-sm absolute inset-x-0 bottom-2 mt-auto">
+          <CardTitle className="font-bold text-lg">Where Are These Conversations Happening?</CardTitle>
+        </CardHeader>
+        <CardContent className="pb-1">
+          <ChartContainer
+            config={srcConfig}
+            className="mx-auto max-h-[300px]"
+          >
+            <RadarChart data={sortedData}>
+              <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+              <PolarAngleAxis dataKey="platform" />
+              <PolarGrid />
+              <Radar
+                dataKey="count"
+                fill="var(--color-desktop)" // Adjust the fill color dynamically if needed
+                fillOpacity={0.6}
+              />
+            </RadarChart>
+          </ChartContainer>
+        </CardContent>
+        <CardFooter className="flex-col text-center gap-2 text-base">
           <div className="leading-none text-muted-foreground">
-          Newsrooms publish 50% of their content from trending topics on Truth Social, 37.5% from Google, and 25% from Instagram. This indicates that Truth Social has the strongest influence on newsroom topic selection, while Google remains a significant driver of coverage.
+          While Google and Instagram drive the highest user traffic, Reddit stands out as the platform with the most trending discussions, highlighting its role in surfacing popular topics.
           </div>
         </CardFooter>
       </Card>
     );
-  };
+  }
 
 
 
@@ -303,15 +245,17 @@ const getTotalCount = (topic: string) => {
 
 
     return (
-      <div className="space-y-8">
-        <Card className="flex flex-col md:flex-row gap-8 p-6">
+        <Card>
+        <CardHeader className="items-center pb-0">
+                <CardTitle className="font-bold text-lg">What’s In Demand And What’s Missing?</CardTitle>
+              </CardHeader>
+          <div className="flex flex-col md:flex-row gap-8 p-6">
           {/* High Demand Topics Table */}
           <div className="w-full md:w-1/2">
-            <CardTitle >High Demand Topics</CardTitle>
             <Table className="table-auto w-full text-left">
               <TableHeader>
                 <TableRow>
-                  <TableHead className="px-4 py-2">Topic</TableHead>
+                  <TableHead className="px-4 py-2">High Demand Topics</TableHead>
                   <TableHead className="px-4 py-2"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -330,11 +274,10 @@ const getTotalCount = (topic: string) => {
 
           {/* Untapped Topics Table */}
           <div className="w-full md:w-1/2">
-            <CardTitle>Untapped Topics</CardTitle>
             <Table className="table-auto w-full text-left">
               <TableHeader>
                 <TableRow>
-                  <TableHead className="px-4 py-2">Topic</TableHead>
+                  <TableHead className="px-4 py-2">Untapped Topics</TableHead>
                   <TableHead className="px-4 py-2"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -350,8 +293,13 @@ const getTotalCount = (topic: string) => {
               </tbody>
             </Table>
           </div>
+          </div>
+      <CardFooter className="flex-col text-center gap-2 text-base">
+        <div className="leading-none text-muted-foreground">
+        While topics like Cryptocurrency, Mental Health and Climate Action are already trending across platforms, areas such as Space Exploration, AI Revolution and Sustainability remain underrepresented, presenting opportunities for increased coverage and engagement.
+        </div>
+      </CardFooter>
         </Card>
-      </div>
     );
   };
 
@@ -367,39 +315,74 @@ const Trends = () => {
       })),
     })) || [];
 
-  // Safely extract newsroomTopics with a similar pattern
-  const newsroomTopics = data.graphs
-    .find((graph: any) => graph.title === "News Topic Counts")
-    ?.sources
-    ?.flatMap((sourceData: any) =>
-      sourceData.topics.map((topic: { topic: string; count: number }) => ({
-        ...topic,
-        source: sourceData.source, // Add source to each topic
-      }))
-    ) || []; // Fallback to empty array if no matching graph or sources are found
+  // Define the type for transformed graph data
+interface GraphData {
+  topic: string;
+  count: number;
+}
 
-  if (!socialMediaData || socialMediaData.length === 0) {
-    return <div>No social media data available.</div>; // Optional fallback message
-  }
+// Define the color palette extracted from the image
+const barColors = [
+  "#522500", "#8F3E00", "#C06722", "#EDA268",
+  "#FFC599", "#FFD1AD", "#FFDCC2", "#FFE6D6"
+];
 
-  // Prepare the `trends` object to pass to InfluenceChart
-  const trends = {
-    google: {
-      trending_topics: socialMediaData[0].topics || [],
-    },
-    instagram: {
-      trending_topics: socialMediaData[1].topics || [],
-    },
-    truthSocial: {
-      trending_topics: socialMediaData[2].topics || [],
-    }
-  };
+const Plots = () => {
+  // Extract and transform data to an array format
+  const rawData = data.graphs.find(graph => graph.title === "News Topic Counts of Articles")?.data || {};
+  const graphData: GraphData[] = Object.entries(rawData).map(([topic, values]) => ({
+    topic,
+    count: (values as { count: number }).count,
+  }));
+
+  console.log(graphData);
+
+  return (
+    <Card>
+      <CardHeader className="items-center pb-0">
+        <CardTitle className="font-bold text-lg">What's Trending On Other Newsrooms?</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={{ /* Adjust your config here */ }}>
+          <BarChart
+            data={graphData}
+            layout="vertical"
+            margin={{ left: 17}}
+          >
+            <YAxis
+              dataKey="topic"
+              type="category"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+            />
+            <XAxis dataKey="count" type="number" />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
+            <Bar dataKey="count" radius={5}>
+              {graphData.map((_, index) => (
+                <Cell key={`cell-${index}`} fill={barColors[index % barColors.length]} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ChartContainer>
+      </CardContent>
+      <CardFooter className="flex-col text-center gap-2 text-base">
+        <div className="leading-none text-muted-foreground">
+        While Football and Politics dominate discussions on other newsrooms, our platform sees higher engagement in Health and Environment. This highlights an opportunity to expand sports and political coverage to align with broader trends and attract a wider audience.
+        </div>
+      </CardFooter>
+    </Card>
+  );
+};
 
   return (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <SocialMedia/>
-        <InfluenceChart trends={trends} newsroomTopics={newsroomTopics} />
+        <InfluenceChart />
         <Topics />
         <Plots />
       </div>

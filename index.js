@@ -25,7 +25,7 @@ checkDatabaseConnection();
 
 // Middleware
 app.use(cors({
-  origin: ["https://axioma-six.vercel.app", "https://newsroom-analytics-demo.vercel.app", "http://localhost:5173"],
+  origin: ["https://axioma-six.vercel.app", "https://newsroom-analytics-demo.vercel.app", "http://localhost:5173", "http://axioma.simppl.org"],
   methods: ["GET", "POST"]
 }));
 app.use(bodyParser.json());

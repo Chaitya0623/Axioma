@@ -239,81 +239,87 @@ const chartConfig = {
 } satisfies ChartConfig
 
 
-const chart2Data = [
-  { browser: "politics", visitors:  24, fill: "var(--color-politics)" },
-  { browser: "arts", visitors: 11, fill: "var(--color-arts)" },
-  { browser: "Security", visitors: 33, fill: "var(--color-Security)" },
-  { browser: "health", visitors: 46, fill: "var(--color-health)" },
-  { browser: "housing", visitors: 17, fill: "var(--color-housing)" },
-];
+export function PerAuthor({ selectedMonth }: { selectedMonth?: Date }) {
+  // Default to "Jan" if no month is provided
+  const selectedMonthName = selectedMonth ? format(selectedMonth, "MMM") : "Jan";
 
+  // Find the "content for author" graph data from the JSON
+  const graphData = dataJson.graphs.find(graph => graph.title === "Personalized Content")?.data;
 
-export function PerAuthor() {
+  // If graphData is undefined or null, handle it gracefully
+  if (!graphData) {
+    return <div>No data available</div>;
+  }
 
+  // Prepare the data dynamically for each category based on the selected month
+  const monthData = Object.entries(graphData).reduce((acc, [category, monthlyData]) => {
+    acc.push({
+      category,
+      visitors: monthlyData[selectedMonthName as keyof typeof monthlyData] || 0,
+      fill: monthlyData.fill, // Include the fill color
+    });
+    return acc;
+  }, [] as { category: string; visitors: number; fill: string }[]);
+
+  // Sort the data by visitors in descending order
+  const sortedData = monthData.sort((a, b) => b.visitors - a.visitors);
+  
   return (
     <Card>
       <CardHeader className="items-center pb-0">
         <CardTitle className="font-bold text-lg">Personalized Content by Author</CardTitle>
-        <div className="flex justify-center items-center">
-          {/* <DatePickerWithRange/> */}
-        </div>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
           <BarChart
             accessibilityLayer
-            data={chart2Data}
+            data={sortedData}
             layout="vertical"
-            margin={{
-              left: 0,
-            }}
+            margin={{ left: 0 }}
           >
             <YAxis
-              dataKey="browser"
+              dataKey="category"
               type="category"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
               tickFormatter={(value) =>
-                chartConfig[value as keyof typeof chartConfig]?.label
+                chartConfig[value as keyof typeof chartConfig]?.label || value
               }
             />
             <XAxis dataKey="visitors" type="number" />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
             <Bar dataKey="visitors" layout="vertical" radius={5} />
           </BarChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col text-center gap-2 text-base">
         <div className="leading-none text-muted-foreground">
-          {/* Showing total visitors for the last 6 months */}
-          The reason Nancy received better engagement was due to her streamlined focus on Security and Health, thereby prioritizing quality over quantity across multiple topics.        </div>
+        The reason Nancy received better engagement was due to her streamlined focus on Security and Health, thereby prioritizing quality over quantity across multiple topics.
+        </div>
       </CardFooter>
     </Card>
   );
 }
 
 
-
-
-
-
-
-
-const visitorChartData = [
-  { month: "January", desktop: 120 },
-  { month: "February", desktop: 140 },
-  { month: "March", desktop: 160 },
-  { month: "April", desktop: 200 },
-  { month: "May", desktop: 180 },
-  { month: "June", desktop: 250 },
-];
-
-
 export function VisitorStoryRatio() {
+  const graphData = dataJson.graphs.find(graph => graph.title === "Visitor Story Ratio")?.data;
+
+  if (!graphData) {
+    return <div>No data available</div>;
+  }
+
+  // Prepare the data for the chart
+  const visitorChartData = Object.entries(graphData).reduce((acc, [_, monthlyData]) => {
+    acc.push({
+      month: monthlyData.month, // Extract month
+      visitors: monthlyData.visitor || 0, // Ensure visitors is a number
+      fill: "hsl(var(--ring))", // Include fill color
+    });
+    return acc;
+  }, [] as { month: string; visitors: number; fill: string }[]);  
+
   return (
     <Card>
       <CardHeader className="items-center pb-0">
@@ -334,29 +340,22 @@ export function VisitorStoryRatio() {
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={(value) => value.slice(0, 3)} // Display the first 3 letters of the month
             />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Bar dataKey="desktop" fill="hsl(var(--ring))" radius={8}>
-              <LabelList
-                position="top"
-                offset={12}
-                className="fill-text"
-                fontSize={12}
-              />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+            <Bar dataKey="visitors" fill="hsl(var(--ring))" radius={8}>
+              <LabelList position="top" offset={12} className="fill-text" fontSize={12} />
             </Bar>
           </BarChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col text-center gap-2 text-base">
         <div className="leading-none text-muted-foreground">
-        The total visitors per story show a pattern similar to engaged sessions, with noticeable increases during months with more holidays. Thus it is important to understand which authors are capturing attention.    </div>
+          The total visitors per story show a pattern similar to engaged sessions, with noticeable increases during months with more holidays. Thus it is important to understand which authors are capturing attention.
+        </div>
       </CardFooter>
     </Card>
-  )
+  );
 }
 
   type UsersProps = {

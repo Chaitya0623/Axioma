@@ -102,7 +102,7 @@ export function Top({ selectedMonth }: { selectedMonth?: Date }) {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle className="font-bold text-lg">What Categories are covered?</CardTitle>
+        <CardTitle className="font-bold text-lg">What Categories Are Covered?</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer config={chartConfig}>
@@ -388,7 +388,7 @@ export function Box() {
       <>
       <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle className="font-bold text-lg">Who are Our Readers?</CardTitle>
+        <CardTitle className="font-bold text-lg">Who Are Our Readers?</CardTitle>
       </CardHeader>
       <div className="pt-4 grid grid-cols-1 md:grid-cols-2 gap-4 p-5">
       <Box1 />
@@ -410,7 +410,7 @@ export function Box() {
       return (
         <Card>
           <CardHeader className="items-center pb-0">
-            <CardTitle className="font-bold text-lg">Trending Articles in the Past 7 Days</CardTitle>
+            <CardTitle className="font-bold text-lg">Trending Articles In The Past 7 Days</CardTitle>
           </CardHeader>
           <CardContent>
           <Table>

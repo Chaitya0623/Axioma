@@ -1,2 +1,1 @@
 # Axioma
-Newsroom Analytics

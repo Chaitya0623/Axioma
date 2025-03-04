@@ -236,7 +236,7 @@ export function Trending() {
   return (
     <Card>
       <CardHeader className="items-center pb-0">
-        <CardTitle className="font-bold text-lg">Predicted Trending Articles for Next 7 Days</CardTitle>
+        <CardTitle className="font-bold text-lg">Predicted Trending Articles For Next 7 Days</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
@@ -466,7 +466,7 @@ export function PredictedCategories({ selectedMonth }: { selectedMonth?: Date })
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle className="font-bold text-lg">Predicted User Interest per Article Category</CardTitle>
+        <CardTitle className="font-bold text-lg">Predicted User Interest Per Article Category</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
