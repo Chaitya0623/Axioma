@@ -77,7 +77,7 @@ export default function Chatbot({ id }: ChatbotProps) {
     });
     console.log({ question, conversation });
     try {
-      const response = await fetch("https://newsroom-analytics-demo.vercel.app/ask", {
+      const response = await fetch("https://axioma.simppl.org/ask", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
