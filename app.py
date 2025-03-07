@@ -6,7 +6,7 @@ from openai import OpenAI
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": ["https://newsroom-analytics-demo.vercel.app", "http://localhost:5173"]}})
+CORS(app, resources={r"/*": {"origins": ["https://newsroom-analytics-demo.vercel.app", "http://localhost:5173", "http://axioma.simppl.org"]}})
 
 import os
 
